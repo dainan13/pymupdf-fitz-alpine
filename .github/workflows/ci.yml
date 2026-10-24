@@ -2,6 +2,10 @@ name: ci
 
 # Pull requests and pushes to the default branch: validate the contract and
 # build/test every release entry, but never publish.
+#
+# Same constraint as release.yml: the targeted Alpine images are too old for
+# the runner's Node.js, so no job uses `container:` - the image is entered with
+# an explicit `docker run`.
 
 on:
   push:
@@ -29,7 +33,7 @@ jobs:
         run: |
           python3 scripts/matrix.py markdown > /tmp/matrix.md
           python3 - <<'EOF'
-          import re, pathlib
+          import pathlib
           doc = pathlib.Path("docs/COMPATIBILITY.md").read_text()
           gen = pathlib.Path("/tmp/matrix.md").read_text().strip()
           assert gen in doc, "docs/COMPATIBILITY.md is stale: run `python3 scripts/matrix.py markdown` and paste the table"
@@ -51,22 +55,34 @@ jobs:
     name: build ${{ matrix.tag }}
     needs: plan
     runs-on: ubuntu-latest
-    container: alpine:${{ matrix.alpine }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: build apk
+      - name: build apk inside alpine:${{ matrix.alpine }}
         env:
           TAG: ${{ matrix.tag }}
           PKGREL: "0"
-          OUT: ${{ github.workspace }}/artifacts
+          ALPINE: ${{ matrix.alpine }}
         run: |
-          set -eu
-          sh scripts/build-apk.sh
-          ls -l artifacts/
+          set -uo pipefail
+          rc=0
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/work" -w /work \
+            -e TAG -e PKGREL -e OUT=/work/artifacts \
+            "alpine:${ALPINE}" \
+            sh -c 'sh scripts/build-apk.sh && chmod -R a+rX /work/artifacts' \
+            2>&1 | tee build.log || rc=$?
+          {
+            echo "### build ${TAG} on alpine:${ALPINE} - exit ${rc}"
+            echo '```'
+            tail -40 build.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          ls -l artifacts/ 2>/dev/null || true
+          [ "$rc" -eq 0 ] || exit "$rc"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -78,7 +94,6 @@ jobs:
     name: test ${{ matrix.tag }} on alpine ${{ matrix.alpine }}
     needs: [plan, build]
     runs-on: ubuntu-latest
-    container: alpine:${{ matrix.alpine }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.plan.outputs.tests) }}
@@ -89,9 +104,23 @@ jobs:
           name: apk-${{ matrix.tag }}
           path: artifacts
 
-      - name: install and test
+      - name: install and test inside alpine:${{ matrix.alpine }}
         env:
           TAG: ${{ matrix.tag }}
+          ALPINE: ${{ matrix.alpine }}
         run: |
-          APK=$(ls artifacts/py3-pymupdf-*.apk | head -1)
-          TAG="$TAG" APK="$APK" sh scripts/run-tests.sh
+          set -uo pipefail
+          rc=0
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/work" -w /work \
+            -e TAG \
+            "alpine:${ALPINE}" \
+            sh -c 'APK=$(ls /work/artifacts/*.apk | head -1); export APK; sh scripts/run-tests.sh' \
+            2>&1 | tee test.log || rc=$?
+          {
+            echo "### test ${TAG} on alpine:${ALPINE} - exit ${rc}"
+            echo '```'
+            tail -40 test.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          [ "$rc" -eq 0 ] || exit "$rc"

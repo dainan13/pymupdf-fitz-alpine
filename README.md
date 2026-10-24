@@ -5,14 +5,18 @@
 GitHub Actions **打 tag 即发布**。
 
 - 不编译 MuPDF 源码，只链接 `libmupdf.so` / `libmupdfthird.so`；
-- 每个 tag 绑定一个明确的编译环境，产物版本号 = `PyMuPDF 版本 - r<UTC 日期>`；
-- 不在约定表里的 tag **不会**触发发布（硬 gate）。
+- 发布用**日期戳 tag**：`git tag r20261024` 一次性构建 `matrix.json` 里的全部条目，
+  产物版本号 = `PyMuPDF 版本 - r<tag 日期>`；
+- tag 不是 `rYYYYMMDD` 就**不构建、不发布**（硬 gate）。
 
 > "apk" 指 Alpine Linux 软件包，不是 Android 安装包。
 
-## 当前约定
+## 当前打包矩阵
 
-| tag | PyMuPDF | 编译环境 | 可安装 Alpine |
+下表每行都会在 `r<日期>` 发布时被构建一次；`条目 ID` 是 `matrix.json` 里的内部标识，
+**不是**发布用的 tag。
+
+| 条目 ID | PyMuPDF | 编译环境 | 可安装 Alpine |
 | --- | --- | --- | --- |
 | `v1.13.20` | 1.13.20 | Alpine 3.8 / Python 3.6 / MuPDF 1.13.0 | 3.8, 3.9 |
 | `v1.16.18` | 1.16.18 | Alpine 3.11 / Python 3.8 / MuPDF 1.16.1 | 3.11 |
@@ -70,17 +74,19 @@ jbig2dec/libjpeg/zlib）。
 ## 发布约定（摘要）
 
 ```
-git tag v1.13.20 && git push origin v1.13.20
-   └─► contract job  查 matrix.json，命中才继续
-       └─► build     在 alpine:3.8 容器内 abuild
-           └─► test  在 3.8、3.9 容器内安装并跑测试
-               └─► publish  1.13.20-r20261022 + SHA256SUMS + 公钥
+git tag r20261024 && git push origin r20261024
+   └─► contract  校验 tag 形如 rYYYYMMDD，算出 pkgrel=20261024，列出全部条目
+       └─► build   matrix：每个条目在各自的 alpine:<X> 里 abuild（docker run）
+           └─► test   每个 apk 在各自 install[] 的 Alpine 里装包 + 跑测试
+               └─► publish  一个 Release，包含全部 6 个 apk + SHA256SUMS + 公钥
 ```
 
-- `pkgrel` = 构建当天 UTC 日期（`YYYYMMDD`），所以同一天重复发布是同一版本号；
-- 未约定的 tag → `contract` job 失败，**不构建、不发布**；
+- `pkgrel` **取自 tag**（`r20261024` → `20261024`），同一天重发是同一版本号；
+- tag 不合法 → `contract` 失败，**不构建、不发布**；
 - 可安装范围逐项实测，不看 `so:` 依赖（Alpine 3.8–3.17 的 muPDF 都叫 `libmupdf.so.0`，
-  ABI 却早已不同）。
+  ABI 却早已不同）；
+- 老 Alpine 镜像不能作为 Actions 的 `container:`（runner 的 Node 需要更新的 musl），
+  所以用 `docker run` 进入镜像。
 
 详见 [docs/MANUAL.md](docs/MANUAL.md)。
 

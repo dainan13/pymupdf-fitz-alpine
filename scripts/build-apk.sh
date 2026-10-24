@@ -32,6 +32,12 @@ APORT=/home/builder/aports/testing/py3-pymupdf
 log() { printf '>>> %s\n' "$*"; }
 die() { printf '>>> ERROR: %s\n' "$*" >&2; exit 1; }
 
+# make CI failures self-explanatory instead of a bare non-zero exit
+trap 'rc=$?; if [ "$rc" -ne 0 ]; then
+	printf ">>> BUILD FAILED (exit %s) on alpine %s / pymupdf %s\n" \
+		"$rc" "$(cat /etc/alpine-release 2>/dev/null)" "${PYMUPDF:-?}" >&2
+fi' EXIT
+
 [ -f /etc/alpine-release ] || die "not running on Alpine"
 [ -f "$REPO/matrix.json" ] || die "matrix.json not found in $REPO"
 HAVE_ALPINE=$(cat /etc/alpine-release)
@@ -64,16 +70,21 @@ else
 fi
 
 PY=$(python3 -c 'import sys; print("%d.%d" % sys.version_info[:2])')
+log "preflight: alpine=$(cat /etc/alpine-release) apk=$(apk --version 2>&1 | head -1)"
 log "tag=$TAG pymupdf=$PYMUPDF alpine=$HAVE_ALPINE python=$PY pkgrel=$PKGREL"
 
 # --- 2. build dependencies, all from the distro repo --------------------
 log "installing build dependencies from apk"
-apk add --no-cache build-base swig pkgconf python3 python3-dev py3-setuptools \
+# note: Alpine 3.8's abuild pulls libressl but not the openssl *CLI*, and
+# abuild-keygen needs it - so list openssl explicitly.
+if ! apk add --no-cache build-base swig pkgconf python3 python3-dev py3-setuptools \
 	mupdf mupdf-dev harfbuzz-dev freetype-dev openjpeg-dev jbig2dec-dev \
-	libjpeg-turbo-dev zlib-dev abuild fakeroot curl git >/dev/null
+	libjpeg-turbo-dev zlib-dev abuild fakeroot curl git openssl; then
+	die "apk add failed on Alpine $HAVE_ALPINE (see the apk output above)"
+fi
 
 MUPDF_PKG=$(awk -F: '/^P:mupdf$/{f=1} f&&/^V:/{print $2; exit}' /lib/apk/db/installed)
-log "distro mupdf: $MUPDF_PKG | python: $(python3 -V 2>&1)"
+log "toolchain: mupdf=$MUPDF_PKG python=$(python3 -V 2>&1 | sed 's/^Python //') openssl=$(command -v openssl || echo MISSING)"
 
 # --- 3. build user (abuild refuses to run as root) ----------------------
 if ! id builder >/dev/null 2>&1; then

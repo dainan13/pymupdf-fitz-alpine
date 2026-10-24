@@ -1,93 +1,149 @@
 name: release
 
-# Convention (see docs/MANUAL.md):
-#   push tag v1.13.20  ->  build on Alpine 3.8  ->  publish 1.13.20-r<UTC date>
-#   a tag that is not listed in matrix.json fails the `contract` job and
-#   nothing is published.
+# One release stamp builds everything.
+#
+#   git tag r20261024 && git push origin r20261024
+#
+# -> pkgrel = 20261024, every entry in matrix.json is built on its own Alpine,
+#    every apk is tested on its install scope, and a single GitHub Release gets
+#    all of them.
+#
+# Notes:
+# * The tag is a date stamp (rYYYYMMDD), not a version. The group of packages
+#   is defined by matrix.json, not by the tag.
+# * The targeted Alpine images are too old for GitHub's bundled Node.js
+#   (Alpine 3.8 = musl 1.1.19, Node needs getentropy/secure_getenv/...), so no
+#   job uses `container:` - the image is entered with an explicit `docker run`.
 
 on:
   push:
-    tags: ["v*"]
+    tags: ["r*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "release stamp, rYYYYMMDD (e.g. r20261024)"
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 concurrency:
-  group: release-${{ github.ref_name }}
+  group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
   contract:
-    name: resolve tag against matrix.json
+    name: resolve release stamp
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.gate.outputs.tag }}
-      pymupdf: ${{ steps.gate.outputs.pymupdf }}
-      alpine: ${{ steps.gate.outputs.alpine }}
-      pkgrel: ${{ steps.gate.outputs.pkgrel }}
-      install: ${{ steps.gate.outputs.install }}
+      tag: ${{ steps.stamp.outputs.tag }}
+      pkgrel: ${{ steps.stamp.outputs.pkgrel }}
+      matrix: ${{ steps.plan.outputs.matrix }}
+      tests: ${{ steps.plan.outputs.tests }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: gate
-        id: gate
+      - name: stamp
+        id: stamp
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           set -eu
-          if ! python3 scripts/matrix.py gha-output --tag "$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"; then
-            echo "::error::tag '$GITHUB_REF_NAME' is not part of the release contract (matrix.json). Nothing will be published."
+          echo "release stamp: $TAG"
+          # prints tag=... and pkgrel=... on success, exits 2 on a bad stamp
+          if ! python3 scripts/matrix.py release-tag --tag "$TAG" >> "$GITHUB_OUTPUT"; then
+            echo "::error::release tag must look like rYYYYMMDD (got '$TAG'). Nothing will be published."
             exit 1
           fi
-          python3 scripts/matrix.py release-notes --tag "$GITHUB_REF_NAME" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: plan (which packages, on which alpine)
+        id: plan
+        run: python3 scripts/matrix.py plan >> "$GITHUB_OUTPUT"
+
+      - name: summary
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: python3 scripts/matrix.py release-notes-all --tag "$TAG" >> "$GITHUB_STEP_SUMMARY"
 
   build:
-    name: build on alpine ${{ needs.contract.outputs.alpine }}
+    name: build ${{ matrix.tag }}
     needs: contract
     runs-on: ubuntu-latest
-    container: alpine:${{ needs.contract.outputs.alpine }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.contract.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: build apk
+      - name: build on alpine:${{ matrix.alpine }}
         env:
-          TAG: ${{ needs.contract.outputs.tag }}
+          TAG: ${{ matrix.tag }}
           PKGREL: ${{ needs.contract.outputs.pkgrel }}
+          ALPINE: ${{ matrix.alpine }}
           ABUILD_PRIVKEY: ${{ secrets.ABUILD_PRIVKEY }}
           ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}
           ABUILD_PACKAGER: ${{ vars.ABUILD_PACKAGER }}
-          OUT: ${{ github.workspace }}/artifacts
         run: |
-          set -eu
-          sh scripts/build-apk.sh
-          ls -l artifacts/
+          set -uo pipefail
+          rc=0
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/work" -w /work \
+            -e TAG -e PKGREL -e OUT=/work/artifacts \
+            -e ABUILD_PRIVKEY -e ABUILD_PUBKEY -e ABUILD_PACKAGER \
+            "alpine:${ALPINE}" \
+            sh -c 'sh scripts/build-apk.sh && chmod -R a+rX /work/artifacts' \
+            2>&1 | tee build.log || rc=$?
+          # keep the tail visible even when the job fails (no more blind red X)
+          {
+            echo "### build ${TAG} on alpine:${ALPINE} - exit ${rc}"
+            echo '```'
+            tail -40 build.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          ls -l artifacts/ 2>/dev/null || true
+          [ "$rc" -eq 0 ] || exit "$rc"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: apk
+          name: apk-${{ matrix.tag }}
           path: artifacts/
           if-no-files-found: error
 
   test:
-    name: test on alpine ${{ matrix.alpine }}
+    name: test ${{ matrix.tag }} on alpine:${{ matrix.alpine }}
     needs: [contract, build]
     runs-on: ubuntu-latest
-    container: alpine:${{ matrix.alpine }}
     strategy:
       fail-fast: false
-      matrix:
-        alpine: ${{ fromJSON(needs.contract.outputs.install) }}
+      matrix: ${{ fromJSON(needs.contract.outputs.tests) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: apk
+          name: apk-${{ matrix.tag }}
           path: artifacts
 
       - name: install and test
         env:
-          TAG: ${{ needs.contract.outputs.tag }}
+          TAG: ${{ matrix.tag }}
+          ALPINE: ${{ matrix.alpine }}
         run: |
-          APK=$(ls artifacts/py3-pymupdf-*.apk | head -1)
-          TAG="$TAG" APK="$APK" sh scripts/run-tests.sh
+          set -uo pipefail
+          rc=0
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/work" -w /work \
+            -e TAG \
+            "alpine:${ALPINE}" \
+            sh -c 'APK=$(ls /work/artifacts/*.apk | head -1); export APK; sh scripts/run-tests.sh' \
+            2>&1 | tee test.log || rc=$?
+          {
+            echo "### test ${TAG} on alpine:${ALPINE} - exit ${rc}"
+            echo '```'
+            tail -40 test.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          [ "$rc" -eq 0 ] || exit "$rc"
 
   publish:
     name: publish release
@@ -95,22 +151,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         with:
-          name: apk
+          pattern: apk-*
           path: artifacts
+          merge-multiple: true
 
       - name: checksums
         run: |
+          set -eu
           cd artifacts
+          ls -l
+          rm -f SHA256SUMS
           sha256sum *.apk > SHA256SUMS
           cat SHA256SUMS
 
       - name: release notes
         env:
           TAG: ${{ needs.contract.outputs.tag }}
-          PKGREL: ${{ needs.contract.outputs.pkgrel }}
-        run: python3 scripts/matrix.py release-notes --tag "$TAG" --pkgrel "$PKGREL" > RELEASE_NOTES.md
+        run: python3 scripts/matrix.py release-notes-all --tag "$TAG" > RELEASE_NOTES.md
 
       - name: publish
         env:

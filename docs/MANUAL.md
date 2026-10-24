@@ -10,37 +10,38 @@ apk"这件事固定成一套可审计的约定，并用 GitHub Actions 实现"�
 
 ## 1. 约定
 
-### 1.1 一个 tag 对应一个编译环境
+### 1.1 一个日期戳 tag 构建全部条目
 
-**git tag 是唯一入口**。tag 里只写 PyMuPDF 版本（`v1.13.20`），它编译在哪个 Alpine
-上由 `matrix.json` 决定，不由 tag 本身推断：
+**发布入口是 `rYYYYMMDD` 形式的 tag**，它不带版本号，只表示"这一次发布"：
 
-```json
-{ "tag": "v1.13.20", "pymupdf": "1.13.20",
-  "build": { "alpine": "3.8", "python": "3.6", "mupdf": "1.13.0-r0" },
-  "install": ["3.8", "3.9"] }
+```sh
+git tag r20261024 && git push origin r20261024
 ```
 
-因此：
+- `pkgrel` 直接取自 tag：`r20261024` → `20261024`；
+- 构建哪些包，由 `matrix.json` 的 `releases[]` 决定，**全部构建、全部测试、一次发布**；
+- `releases[].tag` 字段（`v1.13.20` 等）只是**条目 ID**，用于 `build-apk.sh` 查表
+  （决定在哪个 Alpine 上编、pymupdf 版本是多少），它不是发布 tag。
 
 | 你做 | 结果 |
 | --- | --- |
-| `git tag v1.13.20 && git push origin v1.13.20` | 在 `alpine:3.8` 容器里编译，跑测试，发布 `1.13.20-r<UTC 日期>` |
-| 打 `v1.16.0` 但 `matrix.json` 里没有 | `contract` job 直接失败，**不构建、不发布**，summary 里给出提示 |
-| 打 `v1.13.20.1` 之类的衍生 tag | 同上（未约定 = 不发布） |
+| `git tag r20261024 && git push origin r20261024` | 6 个条目全部构建（各自 Alpine），全部测试，一个 Release 里 6 个 apk |
+| 打 `v1.16.18` 之类 | `contract` job 报 "must look like rYYYYMMDD"，**不构建、不发布** |
+| 打 `r2026` / `r202610` | 同上（必须是 8 位数字） |
 
-"不发布"是硬 gate：`contract` job 失败后 `build` / `test` / `publish` 都不会运行。
+"不发布"是硬 gate：`contract` 失败后 `build` / `test` / `publish` 都不会运行。
 
 ### 1.2 产物命名
 
 ```
-py3-pymupdf-<pkgver>-r<pkgrel>.apk      pkgrel = 构建当天 UTC 日期 YYYYMMDD
-例：py3-pymupdf-1.13.20-r20261022.apk
+py3-pymupdf-<pkgver>-r<pkgrel>.apk      pkgrel = 发布 tag 里的日期
+例：git tag r20261024  ->  py3-pymupdf-1.13.20-r20261024.apk
+                          py3-pymupdf-1.19.5-r20261024.apk  (同一个 Release 里)
 ```
 
 - `pkgver` 永远等于 PyMuPDF 版本号；
-- `pkgrel` 用日期而不是递增序号：同一天重跑会得到相同的 apk 版本号，Release 资产
-  以 `--clobber` 覆盖（内容里 `builddate` 会变，但功能一致）；
+- `pkgrel` 取自 tag，不是构建日期：同一天重跑得到相同版本号，Release 资产以
+  `--clobber` 覆盖（内容里 `builddate` 会变，功能一致）；
 - 该 apk 的 `depends` 由 abuild 自动推导为 `python3` + `mupdf` + 具体 so 依赖。
 
 ### 1.3 可安装范围（install scope）
@@ -105,16 +106,17 @@ CI 的 `lint` 任务会检查文档与 `matrix.json` 是否一致。
 ## 3. 发布流水线（`.github/workflows/release.yml`）
 
 ```
-push tag v*  ──►  contract   解析 tag；不在 matrix.json 就失败退出
+push tag r*  ──►  contract   校验 rYYYYMMDD -> pkgrel；列出 matrix.json 全部条目
                    │
                    ▼
-                 build      在 alpine:<build.alpine> 容器里跑 scripts/build-apk.sh
-                   │        （装 apk 依赖 → 渲染 APKBUILD → abuild → 产物 + SHA256）
+                 build      matrix，每个条目一个 job：
+                   │        在 alpine:<build.alpine> 里跑 scripts/build-apk.sh
+                   │        （装 apk 依赖 → 渲染 APKBUILD → abuild → 产物）
                    ▼
-                 test       对 install[] 里每个 Alpine 起容器，装 apk 跑测试
-                   │
+                 test       matrix（条目 × install[]）：每个 apk 在对应 Alpine
+                   │        里装包 + tests/smoke.py + tests/feature.py
                    ▼
-                 publish    sha256、Release notes、gh release upload
+                 publish    合并全部产物、sha256、Release notes、gh release upload
 ```
 
 - 构建全程只用该 Alpine 的 apk：`python3-dev`、`mupdf-dev` 等；**不编译 MuPDF 源码**。
@@ -264,6 +266,7 @@ APK=artifacts/py3-pymupdf-1.13.20-r0.apk sh scripts/run-tests.sh   # 在目标 A
 | `sha512sum: ... Permission denied` | distfile 权限不对（`chmod 644`，属主 builder 可读） |
 | `error: command 'swig' failed` | PyMuPDF 1.21 起 sdist 不再带预生成 wrapper，需要 `swig`（模板 makedepends 已含） |
 | `fitz_wrap.c: fatal error: ft2build.h: No such file or directory` | PyMuPDF 1.18.x 直接 `#include <ft2build.h>`，需要 `-I/usr/include/freetype2`；模板里已设 `CPPFLAGS` |
+| `Error relocating /__e/node24_alpine/bin/node: getrandom / secure_getenv / pthread_getname_np: symbol not found`（`actions/checkout` 直接失败） | **不要在 `jobs.<id>.container` 里用这些老 Alpine**。GitHub 会把 runner 自带的 Node.js 注入容器，它需要 musl ≥1.1.20 的符号，而 3.8 是 1.1.19。两个 workflow 都改成留在 ubuntu runner 上、用 `docker run` 显式进入目标镜像 |
 | `ImportError: Error relocating /usr/lib/libmupdf.so.0: hb_buffer_add_utf8 / FT_Select_Charmap ...` | Alpine 的 `libmupdf.so` 把 freetype/harfbuzz/jpeg/openjpeg/jbig2dec/zlib 的符号留给加载方。从 MuPDF 1.16 起必须在链接扩展时显式带上这些库：`matrix.json` 的 `build.extra_link_libs` 会渲染成 `-Wl,--no-as-needed -l...`（1.13.20/3.8 不需要，保持为空） |
 | `-lmupdf-third: not found` | PyMuPDF ≥1.16 的库名带连字符，Alpine 是 `libmupdfthird.so`；模板里的 `build()` 已自动改写 |
 | `so:libpython3.6m.so.1.0 (no such package)` | 装到 Python 版本不匹配的 Alpine 上了；查 `install` 范围 |
@@ -335,18 +338,25 @@ APK=artifacts/py3-pymupdf-1.13.20-r0.apk sh scripts/run-tests.sh   # 在目标 A
 
    不配也能发：`build-apk.sh` 会生成一次性密钥，公钥随 Release 一起上传。
 
-3. **打 tag 触发发布**
+3. **打 tag 触发发布**（日期戳，一次构建全部）
 
    ```sh
-   git tag v1.16.18
-   git push origin v1.16.18
+   git tag r20261024
+   git push origin r20261024
    ```
 
-   四个 job 依次是 `contract`（查 `matrix.json`）→ `build`（`alpine:3.11` 容器内 abuild）
-   → `test`（在 `install[]` 的每个 Alpine 里装包并跑测试）→ `publish`（`gh release`）。
+   四个 job 依次是 `contract`（校验 tag、算 pkgrel、列出全部条目）→ `build`
+   （matrix：每个条目一个 job，用 `docker run alpine:<版本>` 跑 abuild）→ `test`
+   （matrix：条目 × `install[]`，每个 apk 在对应 Alpine 里装包并跑测试）→
+   `publish`（合并全部 apk，一次 `gh release`）。
 
-4. **验收**：Release 页面应有 `py3-pymupdf-1.16.18-r<日期>.apk`、`SHA256SUMS`、
-   `.rsa.pub`、`APKBUILD-1.16.18-r<日期>`。
+   若需要重跑（例如修了 workflow 本身）：用 **Actions → release → Run workflow**，
+   输入 tag（`workflow_dispatch`）。不要用失败的 run 上的 "Re-run jobs" —— 它会重放
+   **那个 commit 里的旧 workflow**，改了也没用。
+
+4. **验收**：一个 Release（tag 名就是 `r20261024`）里应有 6 个
+   `py3-pymupdf-<版本>-r20261024.apk`、`SHA256SUMS`、`.rsa.pub` 和各条目的
+   `APKBUILD-<版本>-r20261024`。
 
 ### 关于"要不要打补丁"
 
