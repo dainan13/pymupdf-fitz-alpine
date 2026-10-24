@@ -1,0 +1,75 @@
+# Rendered from apkbuild/APKBUILD.in by scripts/matrix.py -- do not edit by hand.
+#
+# Alpine: @ALPINE@   Python: @PYTHON@   MuPDF: @MUPDF@
+# PyMuPDF @PYMUPDF@ is built against the distro MuPDF (apk main/mupdf), i.e.
+# headers from /usr/include/mupdf and libmupdf / libmupdfthird -- no MuPDF
+# source is compiled here.
+pkgname=@PKGNAME@
+pkgver=@PYMUPDF@
+pkgrel=@PKGREL@
+pkgdesc="Python 3 bindings for the MuPDF PDF rendering library (MuPDF @MUPDF_LINE@)"
+url="https://github.com/rk700/PyMuPDF"
+arch="x86_64"
+license="AGPL-3.0"
+depends="python3 mupdf"
+makedepends="build-base python3-dev py3-setuptools swig mupdf-dev harfbuzz-dev freetype-dev libjpeg-turbo-dev openjpeg-dev jbig2dec-dev zlib-dev"
+subpackages=""
+source="PyMuPDF-$pkgver.tar.gz::https://files.pythonhosted.org/packages/source/P/PyMuPDF/PyMuPDF-$pkgver.tar.gz"
+builddir="$srcdir/PyMuPDF-$pkgver"
+sha512sums="@SHA512@"
+
+build() {
+	cd "$builddir"
+
+	# Alpine's libmupdf.so leaves freetype/harfbuzz/jpeg/openjpeg/jbig2dec/zlib
+	# symbols for the loading program to provide, so from MuPDF 1.16 on the
+	# extension has to link them itself (and --as-needed must not drop them).
+	export LDFLAGS="$LDFLAGS @LINK_LDFLAGS@"
+	# PyMuPDF 1.18.x includes <ft2build.h> directly (later lines add this dir
+	# themselves); freetype-dev ships it outside the default include path.
+	export CPPFLAGS="$CPPFLAGS -I/usr/include/freetype2"
+
+	# The third-party library is named differently per Alpine release and
+	# disappears entirely in MuPDF >= 1.19 (folded into libmupdf):
+	#   3.8/3.11 -> libmupdfthird.so   3.13/3.14 -> libmupdf-third.so
+	if [ -e /usr/lib/libmupdf-third.so ]; then
+		sed -i 's/"mupdfthird"/"mupdf-third"/g' setup.py || true
+	elif [ -e /usr/lib/libmupdfthird.so ]; then
+		sed -i 's/"mupdf-third"/"mupdfthird"/g' setup.py || true
+	else
+		sed -i 's/"mupdf-third",//; s/"mupdfthird",//' setup.py || true
+	fi
+
+	# Alpine builds MuPDF without JavaScript. PyMuPDF >= 1.18 still references
+	# jm_valid_chars() (mujs) and then refuses to load, so provide a no-op stub.
+	# Versions that do not mention it (e.g. 1.13.x) are left untouched.
+	if grep -q 'jm_valid_chars' fitz/fitz_wrap.c 2>/dev/null &&
+		! nm -D /usr/lib/libmupdf.so.0 2>/dev/null | grep -q 'jm_valid_chars'; then
+		cat > compat_mujs_stub.c <<-'EOF'
+		#include <mupdf/fitz.h>
+		void jm_valid_chars(fz_context *c, fz_font *f, void *p) { (void)c; (void)f; (void)p; }
+		EOF
+		sed -i 's|\["fitz/fitz_wrap.c"\]|["fitz/fitz_wrap.c", "compat_mujs_stub.c"]|' setup.py
+	fi
+
+	python3 setup.py build
+}
+
+check() {
+	cd "$builddir"
+	python3 - <<-'EOF'
+	import glob, sys
+	sys.path.insert(0, glob.glob("build/lib.*")[0])
+	import fitz
+	print("PyMuPDF %s -> MuPDF %s" % (fitz.VersionBind, getattr(fitz, "VersionFitz", "?")))
+	doc = fitz.open()
+	page = doc.newPage()
+	page.insertText(fitz.Point(72, 72), "py3-pymupdf check")
+	assert "py3-pymupdf" in doc[0].getText(), "text extraction failed"
+	EOF
+}
+
+package() {
+	cd "$builddir"
+	python3 setup.py install --prefix=/usr --root="$pkgdir" --skip-build
+}

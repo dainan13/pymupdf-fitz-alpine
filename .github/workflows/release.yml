@@ -1,0 +1,130 @@
+name: release
+
+# Convention (see docs/MANUAL.md):
+#   push tag v1.13.20  ->  build on Alpine 3.8  ->  publish 1.13.20-r<UTC date>
+#   a tag that is not listed in matrix.json fails the `contract` job and
+#   nothing is published.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  contract:
+    name: resolve tag against matrix.json
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.gate.outputs.tag }}
+      pymupdf: ${{ steps.gate.outputs.pymupdf }}
+      alpine: ${{ steps.gate.outputs.alpine }}
+      pkgrel: ${{ steps.gate.outputs.pkgrel }}
+      install: ${{ steps.gate.outputs.install }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: gate
+        id: gate
+        run: |
+          set -eu
+          if ! python3 scripts/matrix.py gha-output --tag "$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"; then
+            echo "::error::tag '$GITHUB_REF_NAME' is not part of the release contract (matrix.json). Nothing will be published."
+            exit 1
+          fi
+          python3 scripts/matrix.py release-notes --tag "$GITHUB_REF_NAME" >> "$GITHUB_STEP_SUMMARY"
+
+  build:
+    name: build on alpine ${{ needs.contract.outputs.alpine }}
+    needs: contract
+    runs-on: ubuntu-latest
+    container: alpine:${{ needs.contract.outputs.alpine }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build apk
+        env:
+          TAG: ${{ needs.contract.outputs.tag }}
+          PKGREL: ${{ needs.contract.outputs.pkgrel }}
+          ABUILD_PRIVKEY: ${{ secrets.ABUILD_PRIVKEY }}
+          ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}
+          ABUILD_PACKAGER: ${{ vars.ABUILD_PACKAGER }}
+          OUT: ${{ github.workspace }}/artifacts
+        run: |
+          set -eu
+          sh scripts/build-apk.sh
+          ls -l artifacts/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: artifacts/
+          if-no-files-found: error
+
+  test:
+    name: test on alpine ${{ matrix.alpine }}
+    needs: [contract, build]
+    runs-on: ubuntu-latest
+    container: alpine:${{ matrix.alpine }}
+    strategy:
+      fail-fast: false
+      matrix:
+        alpine: ${{ fromJSON(needs.contract.outputs.install) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk
+          path: artifacts
+
+      - name: install and test
+        env:
+          TAG: ${{ needs.contract.outputs.tag }}
+        run: |
+          APK=$(ls artifacts/py3-pymupdf-*.apk | head -1)
+          TAG="$TAG" APK="$APK" sh scripts/run-tests.sh
+
+  publish:
+    name: publish release
+    needs: [contract, build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk
+          path: artifacts
+
+      - name: checksums
+        run: |
+          cd artifacts
+          sha256sum *.apk > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: release notes
+        env:
+          TAG: ${{ needs.contract.outputs.tag }}
+          PKGREL: ${{ needs.contract.outputs.pkgrel }}
+        run: python3 scripts/matrix.py release-notes --tag "$TAG" --pkgrel "$PKGREL" > RELEASE_NOTES.md
+
+      - name: publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.contract.outputs.tag }}
+        run: |
+          set -eu
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release $TAG already exists, updating assets"
+          else
+            gh release create "$TAG" --title "$TAG" --notes-file RELEASE_NOTES.md
+          fi
+          gh release upload "$TAG" artifacts/*.apk artifacts/SHA256SUMS --clobber
+          for f in artifacts/*.rsa.pub artifacts/APKBUILD-*; do
+            [ -f "$f" ] && gh release upload "$TAG" "$f" --clobber
+          done
+          echo "published https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG"

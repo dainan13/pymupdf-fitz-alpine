@@ -1,0 +1,54 @@
+>>> alpine 3.15.11 | python Python 3.9.18
+>>> installing /home/builder/packages/testing/x86_64/py3-pymupdf-1.19.6-r0.apk
+>>> fitz 1.19.6 -> mupdf 1.19.0
+>>> smoke test
+Deprecation: 'newPage' removed from class 'Document' after v1.19 - use 'new_page'.
+Deprecation: 'insertText' removed from class 'Page' after v1.19 - use 'insert_text'.
+Deprecation: 'drawRect' removed from class 'Page' after v1.19 - use 'draw_rect'.
+Deprecation: 'getText' removed from class 'Page' after v1.19 - use 'get_text'.
+Deprecation: 'getPixmap' removed from class 'Page' after v1.19 - use 'get_pixmap'.
+Deprecation: 'writePNG' removed from class 'Pixmap' after v1.19 - use 'save'.
+python      : 3.9.18
+fitz module : /usr/lib/python3.9/site-packages/fitz/__init__.py
+VersionBind : 1.19.6
+VersionFitz : 1.19.0
+wrote       : /tmp/pymupdf-smoke/hello.pdf 1030 bytes
+text        : 'Hello PyMuPDF on Alpine\nMuPDF 1.19.0'
+rendered    : 800x600 14349 bytes
+in-memory   : 1030 bytes
+RESULT: SMOKE OK
+>>> feature test
+Deprecation: 'newPage' removed from class 'Document' after v1.19 - use 'new_page'.
+Deprecation: 'insertText' removed from class 'Page' after v1.19 - use 'insert_text'.
+Deprecation: 'insertTextbox' removed from class 'Page' after v1.19 - use 'insert_textbox'.
+Deprecation: 'drawRect' removed from class 'Page' after v1.19 - use 'draw_rect'.
+Deprecation: 'drawCircle' removed from class 'Page' after v1.19 - use 'draw_circle'.
+Deprecation: 'getPixmap' removed from class 'Page' after v1.19 - use 'get_pixmap'.
+Deprecation: 'insertImage' removed from class 'Page' after v1.19 - use 'insert_image'.
+Deprecation: 'drawBezier' removed from class 'Page' after v1.19 - use 'draw_bezier'.
+Deprecation: 'addHighlightAnnot' removed from class 'Page' after v1.19 - use 'add_highlight_annot'.
+Deprecation: 'insertLink' removed from class 'Page' after v1.19 - use 'insert_link'.
+Deprecation: 'setToC' removed from class 'Document' after v1.19 - use 'set_toc'.
+Deprecation: 'getToC' removed from class 'Document' after v1.19 - use 'get_toc'.
+Deprecation: 'getText' removed from class 'Page' after v1.19 - use 'get_text'.
+Deprecation: 'getImageList' removed from class 'Page' after v1.19 - use 'get_images'.
+Deprecation: 'getLinks' removed from class 'Page' after v1.19 - use 'get_links'.
+Deprecation: 'writePNG' removed from class 'Pixmap' after v1.19 - use 'save'.
+Deprecation: 'insertPDF' removed from class 'Document' after v1.19 - use 'insert_pdf'.
+Deprecation: 'getFontList' removed from class 'Page' after v1.19 - use 'get_fonts'.
+versions    : bind=1.19.6 fitz=1.19.0
+page1 image : 298x421 embedded
+saved       : /tmp/pymupdf-feature/feature.pdf 11634 bytes
+toc         : [[1, 'First', 1], [1, 'Second', 2]]
+text p1     : 291 chars
+dict blocks : 3
+images p1   : 1
+link p2     : kind=1
+render p1   : 893x1263 3 comp
+render p2   : 893x1263 3 comp
+alpha png   : 4 comp 37885 bytes
+in-memory   : 11634 bytes
+insertPDF   : ok
+fonts p1    : [(5, 'n/a', 'Type1', 'Helvetica', 'Helvetica', 'WinAnsiEncoding'), (7, 'n/a', 'Type1', 'Times-Roman', 'Times-Roman', 'WinAnsiEncoding')]
+RESULT: FEATURE OK
+>>> PASS: v1.19.6 on alpine 3.15.11

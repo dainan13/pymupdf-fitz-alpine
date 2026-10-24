@@ -1,0 +1,11 @@
+# build output
+/artifacts/
+# local caches (rootfs chroots, downloaded tarballs, derive records)
+/.cache/
+# python
+__pycache__/
+*.pyc
+# editors / OS
+.vscode/
+.idea/
+.DS_Store

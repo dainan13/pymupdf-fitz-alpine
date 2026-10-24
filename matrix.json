@@ -1,0 +1,285 @@
+{
+  "schema": 1,
+  "pkgname": "py3-pymupdf",
+  "tag_prefix": "v",
+  "pkgrel": "date-utc",
+  "description": "Release contract: which git tag builds which PyMuPDF on which Alpine, and where the result may be installed.",
+  "releases": [
+    {
+      "tag": "v1.13.20",
+      "pymupdf": "1.13.20",
+      "mupdf_line": "1.13",
+      "build": {
+        "alpine": "3.8",
+        "python": "3.6",
+        "mupdf": "1.13.0-r0",
+        "abi_tag": "cpython-36m",
+        "site_packages": "/usr/lib/python3.6/site-packages",
+        "extra_link_libs": []
+      },
+      "install": [
+        "3.8",
+        "3.9"
+      ],
+      "verified": {
+        "built": true,
+        "tested_install": [
+          "3.8",
+          "3.9"
+        ],
+        "tests": [
+          "smoke",
+          "feature"
+        ],
+        "evidence": [
+          "docs/evidence/build-1.13.20-r20261022.log",
+          "docs/evidence/test-alpine38.log",
+          "docs/evidence/test-alpine39.log"
+        ],
+        "released": true
+      },
+      "notes": "PyMuPDF 1.13.x is the only line matching MuPDF 1.13. Alpine 3.9 ships mupdf 1.13.0-r2 (rebuild of the same upstream release) and python3 3.6.9, so the apk built on 3.8 installs and runs there unchanged."
+    },
+    {
+      "tag": "v1.16.18",
+      "pymupdf": "1.16.18",
+      "mupdf_line": "1.16",
+      "build": {
+        "alpine": "3.11",
+        "python": "3.8",
+        "mupdf": "1.16.1",
+        "abi_tag": "cpython-38",
+        "site_packages": "/usr/lib/python3.8/site-packages",
+        "extra_link_libs": [
+          "freetype",
+          "jpeg",
+          "openjp2",
+          "jbig2dec",
+          "harfbuzz",
+          "z"
+        ]
+      },
+      "install": [
+        "3.11"
+      ],
+      "verified": {
+        "built": false,
+        "tested_install": [
+          "3.11"
+        ],
+        "tests": [
+          "smoke",
+          "feature"
+        ],
+        "evidence": [
+          "docs/evidence/derive-3.11-1.16.18.log"
+        ],
+        "note": "derivation run compiled in-place on 3.11 and passed tests/smoke.py + tests/feature.py; the apk still has to be produced by the release workflow"
+      },
+      "notes": "MuPDF 1.16 keeps freetype/harfbuzz/jpeg/openjpeg/jbig2dec/zlib symbols for the loader, so the extension must link them (build.extra_link_libs)."
+    },
+    {
+      "tag": "v1.18.0",
+      "pymupdf": "1.18.0",
+      "mupdf_line": "1.18",
+      "build": {
+        "alpine": "3.13",
+        "python": "3.8",
+        "mupdf": "1.18.0",
+        "abi_tag": "cpython-38",
+        "site_packages": "/usr/lib/python3.8/site-packages",
+        "extra_link_libs": [
+          "freetype",
+          "jpeg",
+          "openjp2",
+          "jbig2dec",
+          "harfbuzz",
+          "z"
+        ]
+      },
+      "install": [
+        "3.13"
+      ],
+      "verified": {
+        "built": false,
+        "tested_install": [
+          "3.13"
+        ],
+        "tests": [
+          "smoke",
+          "feature"
+        ],
+        "evidence": [
+          "docs/evidence/derive-3.13-1.18.0.log"
+        ],
+        "note": "derivation run compiled on 3.13 and passed tests/smoke.py + tests/feature.py after stubbing jm_valid_chars (Alpine's MuPDF is built without JavaScript); the apk still has to be produced by the release workflow"
+      },
+      "notes": "Alpine 3.14 has the same MuPDF 1.18 but Python 3.9, so per the version-offset rule it will take v1.18.1 (a separate build)."
+    },
+    {
+      "tag": "v1.18.1",
+      "pymupdf": "1.18.1",
+      "mupdf_line": "1.18",
+      "build": {
+        "alpine": "3.14",
+        "python": "3.9",
+        "mupdf": "1.18.0",
+        "abi_tag": "cpython-39",
+        "site_packages": "/usr/lib/python3.9/site-packages",
+        "extra_link_libs": [
+          "freetype",
+          "jpeg",
+          "openjp2",
+          "jbig2dec",
+          "harfbuzz",
+          "z"
+        ]
+      },
+      "install": [
+        "3.14"
+      ],
+      "verified": {
+        "built": false,
+        "tested_install": [
+          "3.14"
+        ],
+        "tests": [
+          "smoke",
+          "feature"
+        ],
+        "evidence": [
+          "docs/evidence/derive-3.14-1.18.1.log"
+        ],
+        "note": "same MuPDF as 3.13 but Python 3.9 -> separate build per the version-offset rule; derivation passed after adding -I/usr/include/freetype2"
+      },
+      "notes": "PyMuPDF 1.18.x includes <ft2build.h> itself, so CPPFLAGS needs -I/usr/include/freetype2 (later lines add it in their setup.py)."
+    },
+    {
+      "tag": "v1.19.6",
+      "pymupdf": "1.19.6",
+      "mupdf_line": "1.19",
+      "build": {
+        "alpine": "3.15",
+        "python": "3.9",
+        "mupdf": "1.19.0",
+        "abi_tag": "cpython-39",
+        "site_packages": "/usr/lib/python3.9/site-packages",
+        "extra_link_libs": [
+          "freetype",
+          "jpeg",
+          "openjp2",
+          "jbig2dec",
+          "harfbuzz",
+          "z"
+        ]
+      },
+      "install": [
+        "3.15"
+      ],
+      "verified": {
+        "built": true,
+        "tested_install": [
+          "3.15"
+        ],
+        "tests": [
+          "smoke",
+          "feature"
+        ],
+        "evidence": [
+          "docs/evidence/build-1.19.6-r0-alpine315.log",
+          "docs/evidence/test-alpine315.log"
+        ],
+        "note": "apk built with abuild (py3-pymupdf-1.19.6-r0.apk, sha256 5ed98cfc...c5e6) and installed on Alpine 3.15.11: smoke + feature pass"
+      },
+      "notes": "MuPDF >= 1.19 no longer ships a separate third-party library, so the template drops it from setup.py's library list."
+    },
+    {
+      "tag": "v1.19.5",
+      "pymupdf": "1.19.5",
+      "mupdf_line": "1.19",
+      "build": {
+        "alpine": "3.16",
+        "python": "3.10",
+        "mupdf": "1.19.1",
+        "abi_tag": "cpython-310",
+        "site_packages": "/usr/lib/python3.10/site-packages",
+        "extra_link_libs": [
+          "freetype",
+          "jpeg",
+          "openjp2",
+          "jbig2dec",
+          "harfbuzz",
+          "z"
+        ]
+      },
+      "install": [
+        "3.16"
+      ],
+      "verified": {
+        "built": true,
+        "tested_install": [
+          "3.16"
+        ],
+        "tests": [
+          "smoke",
+          "feature"
+        ],
+        "evidence": [
+          "docs/evidence/build-1.19.5-r0-alpine316.log",
+          "docs/evidence/test-alpine316.log"
+        ],
+        "note": "apk built with abuild (py3-pymupdf-1.19.5-r0.apk, sha256 54777f8e...a551) and installed on Alpine 3.16.9 (Python 3.10): smoke + feature pass"
+      },
+      "notes": "MuPDF >= 1.19 no longer ships a separate third-party library, so the template drops it from setup.py's library list."
+    }
+  ],
+  "pending": [
+    {
+      "alpine": "3.10",
+      "python": "3.7",
+      "mupdf": "1.15.0",
+      "candidate_pymupdf": [
+        "1.16.0"
+      ],
+      "status": "rejected",
+      "reason": "PyMuPDF 1.16.0 does not compile against MuPDF 1.15; PyMuPDF has no 1.15 line."
+    },
+    {
+      "alpine": "3.12",
+      "python": "3.8",
+      "mupdf": "1.17.0",
+      "candidate_pymupdf": [
+        "1.17.0",
+        "1.17.7"
+      ],
+      "status": "rejected",
+      "reason": "1.17.7 needs MuPDF 1.18's redact API; 1.17.0 compiles and passes smoke but segfaults on Page.firstAnnot (upstream bug)."
+    },
+    {
+      "alpine": "3.17",
+      "python": "3.10",
+      "mupdf": "1.21.0",
+      "candidate_pymupdf": [
+        "1.21.0"
+      ],
+      "status": "out-of-scope",
+      "reason": "PyMuPDF 1.21.0 no longer supports a system MuPDF: setup.py always builds MuPDF from source (PYMUPDF_SETUP_MUPDF_BUILD / _TGZ), which violates the 'dependencies come from apk' rule. Alpine also never ships MuPDF 1.20, so no PyMuPDF 1.20.x line pairs with an Alpine release."
+    }
+  ],
+  "scope": {
+    "supported_alpine": [
+      "3.8",
+      "3.9",
+      "3.11",
+      "3.13",
+      "3.14",
+      "3.15",
+      "3.16"
+    ],
+    "unsupported_alpine": {
+      "3.10": "no PyMuPDF 1.15 line",
+      "3.12": "PyMuPDF 1.17 is unstable",
+      "3.17+": "PyMuPDF >= 1.21 builds its own MuPDF, not allowed by the project rule"
+    }
+  }
+}

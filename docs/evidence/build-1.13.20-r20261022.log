@@ -1,0 +1,464 @@
+>>> tag=v1.13.20 pymupdf=1.13.20 alpine=3.8.0 python=3.6 pkgrel=20261022
+>>> installing build dependencies from apk
+>>> distro mupdf: 1.13.0-r0 | python: Python 3.6.9
+>>> using distfile /var/cache/distfiles/PyMuPDF-1.13.20.tar.gz
+>>> rendering APKBUILD into /home/builder/aports/testing/py3-pymupdf
+>>> running abuild as user 'builder'
+>>> py3-pymupdf: abuild 3.2.0-r1
+>>> py3-pymupdf: Checking sanity of /home/builder/aports/testing/py3-pymupdf/APKBUILD...
+>>> WARNING: py3-pymupdf: No maintainer
+>>> py3-pymupdf: Analyzing dependencies...
+>>> py3-pymupdf: Cleaning temporary build dirs...
+>>> py3-pymupdf: Fetching PyMuPDF-1.13.20.tar.gz::https://files.pythonhosted.org/packages/source/P/PyMuPDF/PyMuPDF-1.13.20.tar.gz
+>>> py3-pymupdf: Fetching PyMuPDF-1.13.20.tar.gz::https://files.pythonhosted.org/packages/source/P/PyMuPDF/PyMuPDF-1.13.20.tar.gz
+>>> py3-pymupdf: Checking sha512sums...
+PyMuPDF-1.13.20.tar.gz: OK
+>>> py3-pymupdf: Unpacking /var/cache/distfiles/PyMuPDF-1.13.20.tar.gz...
+running build
+running build_py
+creating build
+creating build/lib.linux-x86_64-3.6
+creating build/lib.linux-x86_64-3.6/fitz
+copying fitz/__init__.py -> build/lib.linux-x86_64-3.6/fitz
+copying fitz/fitz.py -> build/lib.linux-x86_64-3.6/fitz
+copying fitz/utils.py -> build/lib.linux-x86_64-3.6/fitz
+running build_ext
+building 'fitz._fitz' extension
+creating build/temp.linux-x86_64-3.6
+creating build/temp.linux-x86_64-3.6/fitz
+gcc -DNDEBUG -g -fwrapv -O3 -Wall -Os -fomit-frame-pointer -Os -fomit-frame-pointer -fPIC -I/usr/include/mupdf -I/usr/local/include/mupdf -I/usr/local/thirdparty/zlib -I/usr/include/python3.6m -c fitz/fitz_wrap.c -o build/temp.linux-x86_64-3.6/fitz/fitz_wrap.o
+fitz/fitz_wrap.c: In function 'JM_BinFromBuffer':
+fitz/fitz_wrap.c:3236:54: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+         size_t len = fz_buffer_storage(gctx, buffer, &c);
+                                                      ^
+In file included from /usr/include/mupdf/fitz/output.h:6:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/buffer.h:34:8: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+        ^~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'page_merge':
+fitz/fitz_wrap.c:3457:40: warning: unused variable 'subt' [-Wunused-variable]
+     pdf_obj *obj = NULL, *ref = NULL, *subt = NULL;
+                                        ^~~~
+fitz/fitz_wrap.c: In function 'merge_range':
+fitz/fitz_wrap.c:3532:26: warning: variable 'count' set but not used [-Wunused-but-set-variable]
+     int page, afterpage, count;
+                          ^~~~~
+fitz/fitz_wrap.c: In function 'fontbuffer':
+fitz/fitz_wrap.c:3611:11: warning: variable 'ext' set but not used [-Wunused-but-set-variable]
+     char *ext = "";
+           ^~~
+fitz/fitz_wrap.c: In function 'JM_AnnotCircleOrRect':
+fitz/fitz_wrap.c:3981:23: warning: unused variable 'pdf' [-Wunused-variable]
+         pdf_document *pdf = page->doc;
+                       ^~~
+fitz/fitz_wrap.c: In function 'JM_extract_stext_imageblock_as_dict':
+fitz/fitz_wrap.c:4439:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 case(FZ_IMAGE_BMP):  strcpy(ext, "bmp");  break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4440:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 case(FZ_IMAGE_GIF):  strcpy(ext, "gif");  break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4441:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 case(FZ_IMAGE_JPEG): strcpy(ext, "jpeg"); break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4442:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 case(FZ_IMAGE_JPX):  strcpy(ext, "jpx");  break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4443:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 case(FZ_IMAGE_JXR):  strcpy(ext, "jxr");  break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4444:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 case(FZ_IMAGE_PNM):  strcpy(ext, "pnm");  break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4445:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 case(FZ_IMAGE_TIFF): strcpy(ext, "tiff"); break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4446:45: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                 default:             strcpy(ext, "png");  break;
+                                             ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4452:20: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+             strcpy(ext, "png");
+                    ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:4459:64: warning: pointer targets in passing argument 1 of 'PyUnicode_FromString' differ in signedness [-Wpointer-sign]
+         PyDict_SetItemString(dict, "ext",  PyString_FromString(ext));
+                                                                ^
+fitz/fitz_wrap.c:751:53: note: in definition of macro 'PyString_FromString'
+ #define PyString_FromString(x) PyUnicode_FromString(x)
+                                                     ^
+In file included from /usr/include/python3.6m/Python.h:89:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/python3.6m/unicodeobject.h:702:23: note: expected 'const char *' but argument is of type 'unsigned char *'
+ PyAPI_FUNC(PyObject*) PyUnicode_FromString(
+                       ^~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'JM_set_widget_properties':
+fitz/fitz_wrap.c:4804:9: warning: variable 'result' set but not used [-Wunused-but-set-variable]
+     int result = 0;
+         ^~~~~~
+fitz/fitz_wrap.c:4641:32: warning: unused variable 'text_col' [-Wunused-variable]
+     pdf_obj *fill_col = NULL, *text_col = NULL, *border_col = NULL;
+                                ^~~~~~~~
+fitz/fitz_wrap.c: In function 'JM_make_ap_object':
+fitz/fitz_wrap.c:5505:58: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+         contbuffer = fz_new_buffer_from_copied_data(ctx, c, strlen(c));
+                                                          ^
+In file included from /usr/include/mupdf/fitz/output.h:6:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/buffer.h:75:1: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:5480:33: warning: unused variable 'extgstate' [-Wunused-variable]
+     pdf_obj *xobj, *ca = NULL, *extgstate = NULL;
+                                 ^~~~~~~~~
+fitz/fitz_wrap.c: In function 'new_fz_document_s':
+fitz/fitz_wrap.c:6111:49: warning: pointer targets in passing argument 2 of 'fz_open_memory' differ in signedness [-Wpointer-sign]
+                     data = fz_open_memory(gctx, streamdata, streamlen);
+                                                 ^~~~~~~~~~
+In file included from /usr/include/mupdf/fitz/output.h:8:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/stream.h:59:12: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_stream *fz_open_memory(fz_context *ctx, const unsigned char *data, size_t len);
+            ^~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s_embeddedFileInfo':
+fitz/fitz_wrap.c:6328:19: warning: unused variable 'sname' [-Wunused-variable]
+             char *sname = NULL;
+                   ^~~~~
+fitz/fitz_wrap.c:6325:24: warning: unused variable 'name_len' [-Wunused-variable]
+             Py_ssize_t name_len = 0;
+                        ^~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s_embeddedFileUpd':
+fitz/fitz_wrap.c:6392:64: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+                     res = fz_new_buffer_from_copied_data(gctx, data, len);
+                                                                ^~~~
+In file included from /usr/include/mupdf/fitz/output.h:6:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/buffer.h:75:1: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s_embeddedFileAdd':
+fitz/fitz_wrap.c:6484:61: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+                 data = fz_new_buffer_from_copied_data(gctx, buffdata, size);
+                                                             ^~~~~~~~
+In file included from /usr/include/mupdf/fitz/output.h:6:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/buffer.h:75:1: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s__getCharWidths':
+fitz/fitz_wrap.c:6898:30: warning: pointer targets in assignment differ in signedness [-Wpointer-sign]
+                         data = fz_lookup_base14_font(gctx, bfname, &size);
+                              ^
+fitz/fitz_wrap.c:6901:74: warning: pointer targets in passing argument 3 of 'fz_new_font_from_memory' differ in signedness [-Wpointer-sign]
+                             font = fz_new_font_from_memory(gctx, bfname, data, size, 0, 0);
+                                                                          ^~~~
+In file included from /usr/include/mupdf/fitz.h:40:0,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/font.h:410:10: note: expected 'const unsigned char *' but argument is of type 'const char *'
+ fz_font *fz_new_font_from_memory(fz_context *ctx, const char *name, const unsigned char *data, int len, int index, int use_glyph_bbox);
+          ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:6880:17: warning: unused variable 'cwlen' [-Wunused-variable]
+             int cwlen = 0;
+                 ^~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s_extractFont':
+fitz/fitz_wrap.c:7017:49: warning: passing argument 1 of 'JM_ASCIIFromChar' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+                     fontname = JM_ASCIIFromChar(pdf_to_name(gctx, bname));
+                                                 ^~~~~~~~~~~
+fitz/fitz_wrap.c:5523:7: note: expected 'char *' but argument is of type 'const char *'
+ char *JM_ASCIIFromChar(char *in)
+       ^~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:6996:24: warning: unused variable 'len' [-Wunused-variable]
+             Py_ssize_t len = 0;
+                        ^~~
+fitz/fitz_wrap.c: In function 'fz_document_s_extractImage':
+fitz/fitz_wrap.c:7093:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             case(FZ_IMAGE_BMP):  strcpy(ext, "bmp");  break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7094:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             case(FZ_IMAGE_GIF):  strcpy(ext, "gif");  break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7095:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             case(FZ_IMAGE_JPEG): strcpy(ext, "jpeg"); break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7096:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             case(FZ_IMAGE_JPX):  strcpy(ext, "jpx");  break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7097:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             case(FZ_IMAGE_JXR):  strcpy(ext, "jxr");  break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7098:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             case(FZ_IMAGE_PNM):  strcpy(ext, "pnm");  break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7099:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             case(FZ_IMAGE_TIFF): strcpy(ext, "tiff"); break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7100:57: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                             default:             strcpy(ext, "png");  break;
+                                                         ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c:7123:32: warning: pointer targets in passing argument 1 of 'strcpy' differ in signedness [-Wpointer-sign]
+                         strcpy(ext, "png");
+                                ^~~
+In file included from /usr/include/python3.6m/Python.h:30:0,
+                 from fitz/fitz_wrap.c:149:
+/usr/include/fortify/string.h:106:27: note: expected 'char *' but argument is of type 'unsigned char *'
+ _FORTIFY_FN(strcpy) char *strcpy(char *__d, const char *__s)
+                           ^~~~~~
+fitz/fitz_wrap.c: In function 'fz_page_s_getSVGimage':
+fitz/fitz_wrap.c:7465:29: warning: unused variable 'seps' [-Wunused-variable]
+             fz_separations *seps = NULL;
+                             ^~~~
+fitz/fitz_wrap.c: In function 'fz_page_s_addLineAnnot':
+fitz/fitz_wrap.c:7505:31: warning: unused variable 'pdf' [-Wunused-variable]
+                 pdf_document *pdf = page->doc;
+                               ^~~
+fitz/fitz_wrap.c: In function 'fz_page_s_addFileAnnot':
+fitz/fitz_wrap.c:7556:64: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_shared_data' differ in signedness [-Wpointer-sign]
+                 filebuf = fz_new_buffer_from_shared_data(gctx, data, len);
+                                                                ^~~~
+In file included from /usr/include/mupdf/fitz/output.h:6:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/buffer.h:69:12: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_buffer *fz_new_buffer_from_shared_data(fz_context *ctx, const unsigned char *data, size_t size);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_page_s_insertImage':
+fitz/fitz_wrap.c:8070:64: warning: passing argument 2 of 'JM_CharFromBytesOrArray' from incompatible pointer type [-Wincompatible-pointer-types]
+             size_t streamlen = JM_CharFromBytesOrArray(stream, &streamdata);
+                                                                ^
+fitz/fitz_wrap.c:3372:8: note: expected 'char **' but argument is of type 'unsigned char **'
+ size_t JM_CharFromBytesOrArray(PyObject *stream, char **data)
+        ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:8074:24: warning: unused variable 'name_len' [-Wunused-variable]
+             Py_ssize_t name_len = 0;
+                        ^~~~~~~~
+fitz/fitz_wrap.c:8073:19: warning: unused variable 'cont' [-Wunused-variable]
+             char *cont = NULL;
+                   ^~~~
+fitz/fitz_wrap.c:8067:24: warning: unused variable 'res' [-Wunused-variable]
+             fz_buffer *res = NULL, *nres = NULL,  *imgbuf = NULL;
+                        ^~~
+fitz/fitz_wrap.c:8065:29: warning: unused variable 'seps' [-Wunused-variable]
+             fz_separations *seps = NULL;
+                             ^~~~
+fitz/fitz_wrap.c: In function 'fz_page_s_insertFont':
+fitz/fitz_wrap.c:8199:22: warning: pointer targets in assignment differ in signedness [-Wpointer-sign]
+                 data = fz_lookup_base14_font(gctx, fontname, &size);
+                      ^
+fitz/fitz_wrap.c:8202:68: warning: pointer targets in passing argument 3 of 'fz_new_font_from_memory' differ in signedness [-Wpointer-sign]
+                     font = fz_new_font_from_memory(gctx, fontname, data, size, 0, 0);
+                                                                    ^~~~
+In file included from /usr/include/mupdf/fitz.h:40:0,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/font.h:410:10: note: expected 'const unsigned char *' but argument is of type 'const char *'
+ fz_font *fz_new_font_from_memory(fz_context *ctx, const char *name, const unsigned char *data, int len, int index, int use_glyph_bbox);
+          ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:8218:68: warning: pointer targets in passing argument 3 of 'fz_new_font_from_memory' differ in signedness [-Wpointer-sign]
+                         font = fz_new_font_from_memory(gctx, NULL, data, size, idx, 0);
+                                                                    ^~~~
+In file included from /usr/include/mupdf/fitz.h:40:0,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/font.h:410:10: note: expected 'const unsigned char *' but argument is of type 'const char *'
+ fz_font *fz_new_font_from_memory(fz_context *ctx, const char *name, const unsigned char *data, int len, int index, int use_glyph_bbox);
+          ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:8239:27: warning: unused variable 'idxo' [-Wunused-variable]
+                 PyObject *idxo = PyInt_FromLong((long) idx);
+                           ^~~~
+fitz/fitz_wrap.c: In function 'new_fz_pixmap_s__SWIG_4':
+fitz/fitz_wrap.c:8652:83: warning: pointer targets in passing argument 8 of 'fz_new_pixmap_with_data' differ in signedness [-Wpointer-sign]
+                 pm = fz_new_pixmap_with_data(gctx, cs, w, h, seps, alpha, stride, data);
+                                                                                   ^~~~
+In file included from /usr/include/mupdf/fitz.h:35:0,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/pixmap.h:111:12: note: expected 'unsigned char *' but argument is of type 'char *'
+ fz_pixmap *fz_new_pixmap_with_data(fz_context *ctx, fz_colorspace *colorspace, int w, int h, fz_separations *seps, int alpha, int stride, unsigned char *samples);
+            ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'new_fz_pixmap_s__SWIG_6':
+fitz/fitz_wrap.c:8680:31: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_shared_data' differ in signedness [-Wpointer-sign]
+                               streamdata, size);
+                               ^~~~~~~~~~
+In file included from /usr/include/mupdf/fitz/output.h:6:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/buffer.h:69:12: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_buffer *fz_new_buffer_from_shared_data(fz_context *ctx, const unsigned char *data, size_t size);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_pixmap_s_setAlpha':
+fitz/fitz_wrap.c:8789:69: warning: passing argument 2 of 'JM_CharFromBytesOrArray' from incompatible pointer type [-Wincompatible-pointer-types]
+                     data_len = JM_CharFromBytesOrArray(alphavalues, &data);
+                                                                     ^
+fitz/fitz_wrap.c:3372:8: note: expected 'char **' but argument is of type 'unsigned char **'
+ size_t JM_CharFromBytesOrArray(PyObject *stream, char **data)
+        ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_annot_s__setAP':
+fitz/fitz_wrap.c:9101:60: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+                 res = fz_new_buffer_from_copied_data(gctx, c, strlen(c));
+                                                            ^
+In file included from /usr/include/mupdf/fitz/output.h:6:0,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:3081:
+/usr/include/mupdf/fitz/buffer.h:75:1: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:9099:24: warning: unused variable 'len' [-Wunused-variable]
+                 size_t len = JM_CharFromBytesOrArray(ap, &c);
+                        ^~~
+fitz/fitz_wrap.c: In function 'fz_annot_s_fileUpd':
+fitz/fitz_wrap.c:9551:47: warning: pointer targets in passing argument 2 of 'JM_deflatebuf' differ in signedness [-Wpointer-sign]
+                     res = JM_deflatebuf(gctx, data, size);
+                                               ^~~~
+fitz/fitz_wrap.c:3250:12: note: expected 'unsigned char *' but argument is of type 'char *'
+ fz_buffer *JM_deflatebuf(fz_context *ctx, unsigned char *p, size_t n)
+            ^~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_annot_s__updateWidget':
+fitz/fitz_wrap.c:9859:27: warning: unused variable 'pdf' [-Wunused-variable]
+             pdf_document *pdf = pdf_get_bound_document(gctx, annot->obj);
+                           ^~~
+fitz/fitz_wrap.c: In function 'fz_document_s_embeddedFileDel':
+fitz/fitz_wrap.c:6321:20: warning: 'm' may be used uninitialized in this function [-Wmaybe-uninitialized]
+             return m;
+                    ^
+gcc -shared -Wl,--as-needed -Wl,--as-needed -Wl,--as-needed -Os -fomit-frame-pointer -Os -fomit-frame-pointer build/temp.linux-x86_64-3.6/fitz/fitz_wrap.o -L/usr/lib -lmupdf -lmupdfthird -lpython3.6m -o build/lib.linux-x86_64-3.6/fitz/_fitz.cpython-36m-x86_64-linux-gnu.so
+>>> py3-pymupdf: Entering fakeroot...
+PyMuPDF 1.13.20 -> MuPDF 1.13.0
+>>> py3-pymupdf: Entering fakeroot...
+running install
+running install_lib
+creating /home/builder/aports/testing/py3-pymupdf/pkg
+creating /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf
+creating /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr
+creating /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib
+creating /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6
+creating /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages
+creating /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz
+copying build/lib.linux-x86_64-3.6/fitz/__init__.py -> /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz
+copying build/lib.linux-x86_64-3.6/fitz/_fitz.cpython-36m-x86_64-linux-gnu.so -> /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz
+creating /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz/__pycache__
+copying build/lib.linux-x86_64-3.6/fitz/__pycache__/fitz.cpython-36.pyc -> /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz/__pycache__
+copying build/lib.linux-x86_64-3.6/fitz/__pycache__/__init__.cpython-36.pyc -> /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz/__pycache__
+copying build/lib.linux-x86_64-3.6/fitz/__pycache__/utils.cpython-36.pyc -> /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz/__pycache__
+copying build/lib.linux-x86_64-3.6/fitz/utils.py -> /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz
+copying build/lib.linux-x86_64-3.6/fitz/fitz.py -> /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/fitz
+running install_egg_info
+Writing /home/builder/aports/testing/py3-pymupdf/pkg/py3-pymupdf/usr/lib/python3.6/site-packages/PyMuPDF-1.13.20-py3.6.egg-info
+>>> py3-pymupdf*: Running postcheck for py3-pymupdf
+>>> py3-pymupdf*: Preparing package py3-pymupdf...
+>>> py3-pymupdf*: Stripping binaries
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+>>> py3-pymupdf*: Scanning shared objects
+>>> py3-pymupdf*: Tracing dependencies...
+	python3
+	mupdf
+	so:libc.musl-x86_64.so.1
+	so:libmupdf.so.0
+	so:libmupdfthird.so.0
+	so:libpython3.6m.so.1.0
+>>> py3-pymupdf*: Package size: 800.0 KB
+>>> py3-pymupdf*: Compressing data...
+>>> py3-pymupdf*: Create checksum...
+>>> py3-pymupdf*: Create py3-pymupdf-1.13.20-r20261022.apk
+>>> py3-pymupdf: Cleaning up srcdir
+>>> py3-pymupdf: Cleaning up pkgdir
+>>> py3-pymupdf: Updating the testing/x86_64 repository index...
+>>> py3-pymupdf: Signing the index...
+>>> artifact: /root/pmrepo/artifacts/py3-pymupdf-1.13.20-r20261022.apk
+5fe27de9c29faf74863291e9aece8cac04dfad1a4b9fb626e8871799fd1d8f5a  /root/pmrepo/artifacts/py3-pymupdf-1.13.20-r20261022.apk
+>>> install scope: ["3.8", "3.9"]
+EXIT=0

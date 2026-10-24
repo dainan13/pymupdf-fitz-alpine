@@ -1,0 +1,53 @@
+>>> =========== alpine 3.11 / PyMuPDF 1.16.18 ===========
+>>> reusing rootfs /var/tmp/pymupdf-derive/rootfs/3.11 (3.11.13)
+running build_ext
+>>> BUILD 1.16.18 on alpine 3.11: OK
+>>> reusing rootfs /var/tmp/pymupdf-derive/rootfs/3.11 (3.11.13)
+tar: PyMuPDF-1.16.18/build/temp.linux-x86_64-3.8/fitz/fitz_wrap.o: file changed as we read it
+tar: PyMuPDF-1.16.18/build/temp.linux-x86_64-3.8/fitz: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz/fitz_wrap.c: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz/_fitz.cpython-38-x86_64-linux-gnu.so: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz/__pycache__/fitz.cpython-38.pyc: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz/__pycache__/utils.cpython-38.pyc: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz/__pycache__: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz/utils.py: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz/fitz.py: file changed as we read it
+tar: PyMuPDF-1.16.18/fitz: file changed as we read it
+tar: PyMuPDF-1.16.18: file changed as we read it
+python      : 3.8.10
+fitz module : /build/PyMuPDF-1.16.18/fitz/__init__.py
+VersionBind : 1.16.18
+VersionFitz : 1.16.0
+wrote       : /tmp/t-3.11/hello.pdf 996 bytes
+text        : 'Hello PyMuPDF on Alpine\nMuPDF 1.16.0'
+rendered    : 800x600 14297 bytes
+in-memory   : 996 bytes
+RESULT: SMOKE OK
+versions    : bind=1.16.18 fitz=1.16.0
+page1 image : 298x421 embedded
+saved       : /tmp/t-3.11/feature.pdf 11313 bytes
+toc         : [[1, 'First', 1], [1, 'Second', 2]]
+text p1     : 291 chars
+dict blocks : 3
+images p1   : 1
+link p2     : kind=1
+render p1   : 893x1263 3 comp
+render p2   : 893x1263 3 comp
+alpha png   : 4 comp 36169 bytes
+in-memory   : 11313 bytes
+insertPDF   : ok
+fonts p1    : [(5, 'n/a', 'Type1', 'Helvetica', 'Helvetica', 'WinAnsiEncoding'), (7, 'n/a', 'Type1', 'Times-Roman', 'Times-Roman', 'WinAnsiEncoding')]
+RESULT: FEATURE OK
+>>> TEST v1.16.18 on alpine 3.11: PASS
+>>> reusing rootfs /var/tmp/pymupdf-derive/rootfs/3.12 (3.12.12)
+Traceback (most recent call last):
+  File "/work/tests/smoke.py", line 11, in <module>
+    import fitz
+  File "/build/PyMuPDF-1.16.18/fitz/__init__.py", line 3, in <module>
+    from fitz.fitz import *
+  File "/build/PyMuPDF-1.16.18/fitz/fitz.py", line 18, in <module>
+    from . import _fitz
+ImportError: Error loading shared library libmupdfthird.so.0: No such file or directory (needed by /build/PyMuPDF-1.16.18/fitz/_fitz.cpython-38-x86_64-linux-gnu.so)
+>>> TEST v1.16.18 on alpine 3.12: FAIL
+>>> record: /root/pmrepo/.cache/derive/3.11-1.16.18.json
+EXIT=0

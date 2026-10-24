@@ -1,0 +1,30 @@
+>>> alpine 3.8.0 | python Python 3.6.9
+>>> installing /root/pmrepo/artifacts/py3-pymupdf-1.13.20-r20261022.apk
+>>> fitz 1.13.20 -> mupdf 1.13.0
+>>> smoke test
+python      : 3.6.9
+fitz module : /usr/lib/python3.6/site-packages/fitz/__init__.py
+VersionBind : 1.13.20
+VersionFitz : 1.13.0
+wrote       : /tmp/pymupdf-smoke/hello.pdf 837 bytes
+text        : 'Hello PyMuPDF on Alpine\nMuPDF 1.13.0'
+rendered    : 800x600 13708 bytes
+in-memory   : 837 bytes
+RESULT: SMOKE OK
+>>> feature test
+versions    : bind=1.13.20 fitz=1.13.0
+page1 image : 298x421 embedded
+saved       : /tmp/pymupdf-feature/feature.pdf 9072 bytes
+toc         : [[1, 'First', 1], [1, 'Second', 2]]
+text p1     : 291 chars
+dict blocks : 3
+images p1   : 1
+link p2     : kind=1
+render p1   : 893x1263 4 comp
+render p2   : 893x1263 4 comp
+alpha png   : 4 comp 35520 bytes
+in-memory   : 9072 bytes
+insertPDF   : ok
+fonts p1    : [[7, 'n/a', 'Type1', 'Helvetica', 'Helvetica', 'WinAnsiEncoding'], [8, 'n/a', 'Type1', 'Times-Roman', 'Times-Roman', 'WinAnsiEncoding']]
+RESULT: FEATURE OK
+>>> PASS: v1.13.20 on alpine 3.8.0

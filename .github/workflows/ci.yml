@@ -1,0 +1,97 @@
+name: ci
+
+# Pull requests and pushes to the default branch: validate the contract and
+# build/test every release entry, but never publish.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint contract and scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: json + python
+        run: |
+          python3 -c "import json; json.load(open('matrix.json'))"
+          python3 -m py_compile scripts/matrix.py scripts/derive_matrix.py tests/smoke.py tests/feature.py
+      - name: shell
+        run: |
+          for s in scripts/*.sh; do sh -n "$s"; done
+      - name: docs are up to date
+        run: |
+          python3 scripts/matrix.py markdown > /tmp/matrix.md
+          python3 - <<'EOF'
+          import re, pathlib
+          doc = pathlib.Path("docs/COMPATIBILITY.md").read_text()
+          gen = pathlib.Path("/tmp/matrix.md").read_text().strip()
+          assert gen in doc, "docs/COMPATIBILITY.md is stale: run `python3 scripts/matrix.py markdown` and paste the table"
+          print("docs ok")
+          EOF
+
+  plan:
+    name: plan
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      tests: ${{ steps.plan.outputs.tests }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        run: python3 scripts/matrix.py plan >> "$GITHUB_OUTPUT"
+
+  build:
+    name: build ${{ matrix.tag }}
+    needs: plan
+    runs-on: ubuntu-latest
+    container: alpine:${{ matrix.alpine }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build apk
+        env:
+          TAG: ${{ matrix.tag }}
+          PKGREL: "0"
+          OUT: ${{ github.workspace }}/artifacts
+        run: |
+          set -eu
+          sh scripts/build-apk.sh
+          ls -l artifacts/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ matrix.tag }}
+          path: artifacts/
+          if-no-files-found: error
+
+  test:
+    name: test ${{ matrix.tag }} on alpine ${{ matrix.alpine }}
+    needs: [plan, build]
+    runs-on: ubuntu-latest
+    container: alpine:${{ matrix.alpine }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.tests) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk-${{ matrix.tag }}
+          path: artifacts
+
+      - name: install and test
+        env:
+          TAG: ${{ matrix.tag }}
+        run: |
+          APK=$(ls artifacts/py3-pymupdf-*.apk | head -1)
+          TAG="$TAG" APK="$APK" sh scripts/run-tests.sh

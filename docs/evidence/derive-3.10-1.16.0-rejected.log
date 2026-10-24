@@ -1,0 +1,428 @@
+>>> =========== alpine 3.10 / PyMuPDF 1.16.0 ===========
+>>> downloading https://mirrors.aliyun.com/alpine/v3.10/releases/x86_64/alpine-minirootfs-3.10.9-x86_64.tar.gz
+>>> extracting into /var/tmp/pymupdf-derive/rootfs/3.10
+running build_ext
+building 'fitz._fitz' extension
+creating build
+creating build/temp.linux-x86_64-3.7
+creating build/temp.linux-x86_64-3.7/fitz
+gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Os -fomit-frame-pointer -g -Os -fomit-frame-pointer -g -Os -fomit-frame-pointer -g -DTHREAD_STACK_SIZE=0x100000 -fPIC -I/usr/include/mupdf -I/usr/local/include/mupdf -I/usr/include/python3.7m -c fitz/fitz_wrap.c -o build/temp.linux-x86_64-3.7/fitz/fitz_wrap.o
+fitz/fitz_wrap.c: In function 'JM_BinFromBuffer':
+fitz/fitz_wrap.c:3479:54: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+         size_t len = fz_buffer_storage(gctx, buffer, &c);
+                                                      ^~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c: In function 'JM_BArrayFromBuffer':
+fitz/fitz_wrap.c:3495:53: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+         size_t len = fz_buffer_storage(ctx, buffer, &c);
+                                                     ^~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c: In function 'JM_B64FromBuffer':
+fitz/fitz_wrap.c:3512:53: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+         size_t len = fz_buffer_storage(ctx, buffer, &c);
+                                                     ^~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c:3516:51: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+         size_t nlen = fz_buffer_storage(ctx, res, &b64);
+                                                   ^~~~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c: In function 'JM_BufferFromBytes':
+fitz/fitz_wrap.c:3685:58: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+         if (c) res = fz_new_buffer_from_copied_data(ctx, c, len);
+                                                          ^
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:28:12: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_buffer *fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'page_merge':
+fitz/fitz_wrap.c:3742:40: warning: unused variable 'subt' [-Wunused-variable]
+     pdf_obj *obj = NULL, *ref = NULL, *subt = NULL;
+                                        ^~~~
+fitz/fitz_wrap.c: In function 'merge_range':
+fitz/fitz_wrap.c:3817:26: warning: variable 'count' set but not used [-Wunused-but-set-variable]
+     int page, afterpage, count;
+                          ^~~~~
+fitz/fitz_wrap.c: In function 'fontbuffer':
+fitz/fitz_wrap.c:3872:11: warning: variable 'ext' set but not used [-Wunused-but-set-variable]
+     char *ext = "";
+           ^~~
+fitz/fitz_wrap.c: In function 'JM_invert_pixmap_rect':
+fitz/fitz_wrap.c:4162:19: warning: operation on 's' may be undefined [-Wsequence-point]
+                 *s++ = 255 - *s;
+                  ~^~
+fitz/fitz_wrap.c:4163:30: warning: value computed is not used [-Wunused-value]
+             if (dest->alpha) *s++;
+                              ^~~~
+fitz/fitz_wrap.c: In function 'JM_image_profile':
+fitz/fitz_wrap.c:4189:11: warning: pointer targets in assignment from 'char *' to 'unsigned char *' differ in signedness [-Wpointer-sign]
+         c = PyBytes_AS_STRING(imagedata);
+           ^
+fitz/fitz_wrap.c:4194:11: warning: pointer targets in assignment from 'char *' to 'unsigned char *' differ in signedness [-Wpointer-sign]
+         c = PyByteArray_AS_STRING(imagedata);
+           ^
+fitz/fitz_wrap.c: In function 'JM_make_annot_DA':
+fitz/fitz_wrap.c:4314:50: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+         size_t len = fz_buffer_storage(ctx, buf, &da);
+                                                  ^~~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c: In function 'JM_get_widget_properties':
+fitz/fitz_wrap.c:4891:17: warning: implicit declaration of function 'pdf_signature_is_signed'; did you mean 'pdf_signature_set_value'? [-Wimplicit-function-declaration]
+             if (pdf_signature_is_signed(ctx, pdf, annot->obj))
+                 ^~~~~~~~~~~~~~~~~~~~~~~
+                 pdf_signature_set_value
+fitz/fitz_wrap.c: In function 'JM_set_widget_properties':
+fitz/fitz_wrap.c:5159:9: warning: variable 'result' set but not used [-Wunused-but-set-variable]
+     int result = 0;
+         ^~~~~~
+fitz/fitz_wrap.c: In function 'JM_embed_file':
+fitz/fitz_wrap.c:5248:64: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+                            fz_new_buffer_from_copied_data(ctx, "  ", 1),
+                                                                ^~~~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:28:12: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_buffer *fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'JM_xobject_from_page':
+fitz/fitz_wrap.c:5683:22: warning: unused variable 'contents' [-Wunused-variable]
+     pdf_obj *xobj1, *contents = NULL, *resources = NULL, *o, *spageref;
+                      ^~~~~~~~
+fitz/fitz_wrap.c: In function 'JM_convert_to_pdf':
+fitz/fitz_wrap.c:6137:51: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+         size_t len = fz_buffer_storage(gctx, res, &c);
+                                                   ^~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c: In function 'new_fz_document_s':
+fitz/fitz_wrap.c:6393:24: error: 'gctx->error' is a pointer; did you mean to use '->'?
+             gctx->error.errcode = 0;       // reset any error code
+                        ^
+                        ->
+fitz/fitz_wrap.c:6394:24: error: 'gctx->error' is a pointer; did you mean to use '->'?
+             gctx->error.message[0] = 0;    // reset any error message
+                        ^
+                        ->
+fitz/fitz_wrap.c:6413:49: warning: pointer targets in passing argument 2 of 'fz_open_memory' differ in signedness [-Wpointer-sign]
+                     data = fz_open_memory(gctx, c, len);
+                                                 ^
+In file included from /usr/include/mupdf/fitz/output.h:8,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/stream.h:25:12: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_stream *fz_open_memory(fz_context *ctx, const unsigned char *data, size_t len);
+            ^~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s__embeddedFileInfo':
+fitz/fitz_wrap.c:6636:19: warning: unused variable 'sname' [-Wunused-variable]
+             char *sname = NULL;
+                   ^~~~~
+fitz/fitz_wrap.c:6634:24: warning: unused variable 'name_len' [-Wunused-variable]
+             Py_ssize_t name_len = 0;
+                        ^~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s__embeddedFileAdd':
+fitz/fitz_wrap.c:6765:54: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+                 size = fz_buffer_storage(gctx, data, &buffdata);
+                                                      ^~~~~~~~~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c:6758:20: warning: variable 'size' set but not used [-Wunused-but-set-variable]
+             size_t size = 0;
+                    ^~~~
+fitz/fitz_wrap.c:6757:17: warning: unused variable 'entry' [-Wunused-variable]
+             int entry = 0;
+                 ^~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s__getPDFfileid':
+fitz/fitz_wrap.c:7008:57: warning: passing argument 3 of 'fz_buffer_storage' from incompatible pointer type [-Wincompatible-pointer-types]
+                         fz_buffer_storage(gctx, buffer, &hex);
+                                                         ^~~~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:18:75: note: expected 'unsigned char **' but argument is of type 'char **'
+ size_t fz_buffer_storage(fz_context *ctx, fz_buffer *buf, unsigned char **datap);
+                                                           ~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s_save':
+fitz/fitz_wrap.c:7050:38: error: 'pdf_default_write_options' undeclared (first use in this function); did you mean 'pdf_parse_write_options'?
+             pdf_write_options opts = pdf_default_write_options;
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+                                      pdf_parse_write_options
+fitz/fitz_wrap.c:7050:38: note: each undeclared identifier is reported only once for each function it appears in
+fitz/fitz_wrap.c:7062:18: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'do_encrypt'; did you mean 'do_decrypt'?
+             opts.do_encrypt         = encryption;
+                  ^~~~~~~~~~
+                  do_decrypt
+fitz/fitz_wrap.c:7063:17: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'permissions'
+             opts.permissions        = permissions;
+                 ^
+fitz/fitz_wrap.c:7066:29: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'opwd_utf8'
+                 memcpy(&opts.opwd_utf8, owner_pw, strlen(owner_pw)+1);
+                             ^
+fitz/fitz_wrap.c:7071:29: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'upwd_utf8'
+                 memcpy(&opts.upwd_utf8, user_pw, strlen(user_pw)+1);
+                             ^
+fitz/fitz_wrap.c: In function 'fz_document_s_write':
+fitz/fitz_wrap.c:7089:38: error: 'pdf_default_write_options' undeclared (first use in this function); did you mean 'pdf_parse_write_options'?
+             pdf_write_options opts = pdf_default_write_options;
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+                                      pdf_parse_write_options
+fitz/fitz_wrap.c:7101:18: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'do_encrypt'; did you mean 'do_decrypt'?
+             opts.do_encrypt         = encryption;
+                  ^~~~~~~~~~
+                  do_decrypt
+fitz/fitz_wrap.c:7102:17: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'permissions'
+             opts.permissions        = permissions;
+                 ^
+fitz/fitz_wrap.c:7105:29: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'opwd_utf8'
+                 memcpy(&opts.opwd_utf8, owner_pw, strlen(owner_pw)+1);
+                             ^
+fitz/fitz_wrap.c:7110:29: error: 'pdf_write_options' {aka 'struct pdf_write_options_s'} has no member named 'upwd_utf8'
+                 memcpy(&opts.upwd_utf8, user_pw, strlen(user_pw)+1);
+                             ^
+fitz/fitz_wrap.c: In function 'fz_document_s__deletePage':
+fitz/fitz_wrap.c:7218:21: warning: unused variable 'count' [-Wunused-variable]
+                 int count = fz_count_pages(gctx, self);
+                     ^~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s__getCharWidths':
+fitz/fitz_wrap.c:7266:26: warning: pointer targets in assignment from 'const unsigned char *' to 'const char *' differ in signedness [-Wpointer-sign]
+                     data = fz_lookup_cjk_font(gctx, ordering, &size, &index);
+                          ^
+fitz/fitz_wrap.c:7267:64: warning: pointer targets in passing argument 3 of 'fz_new_font_from_memory' differ in signedness [-Wpointer-sign]
+                     font = fz_new_font_from_memory(gctx, NULL, data, size, index, 0);
+                                                                ^~~~
+In file included from /usr/include/mupdf/fitz.h:40,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/font.h:178:10: note: expected 'const unsigned char *' but argument is of type 'const char *'
+ fz_font *fz_new_font_from_memory(fz_context *ctx, const char *name, const unsigned char *data, int len, int index, int use_glyph_bbox);
+          ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:7270:22: warning: pointer targets in assignment from 'const unsigned char *' to 'const char *' differ in signedness [-Wpointer-sign]
+                 data = fz_lookup_base14_font(gctx, bfname, &size);
+                      ^
+fitz/fitz_wrap.c:7273:66: warning: pointer targets in passing argument 3 of 'fz_new_font_from_memory' differ in signedness [-Wpointer-sign]
+                     font = fz_new_font_from_memory(gctx, bfname, data, size, 0, 0);
+                                                                  ^~~~
+In file included from /usr/include/mupdf/fitz.h:40,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/font.h:178:10: note: expected 'const unsigned char *' but argument is of type 'const char *'
+ fz_font *fz_new_font_from_memory(fz_context *ctx, const char *name, const unsigned char *data, int len, int index, int use_glyph_bbox);
+          ^~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:7258:36: warning: unused variable 'fb_font' [-Wunused-variable]
+             fz_font *font = NULL, *fb_font= NULL;
+                                    ^~~~~~~
+fitz/fitz_wrap.c:7255:17: warning: unused variable 'lang' [-Wunused-variable]
+             int lang = 0;
+                 ^~~~
+fitz/fitz_wrap.c:7254:17: warning: unused variable 'cwlen' [-Wunused-variable]
+             int cwlen = 0;
+                 ^~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s_extractFont':
+fitz/fitz_wrap.c:7368:24: warning: unused variable 'len' [-Wunused-variable]
+             Py_ssize_t len = 0;
+                        ^~~
+fitz/fitz_wrap.c: In function 'fz_document_s_extractImage':
+fitz/fitz_wrap.c:7501:71: error: incompatible type for argument 6 of 'fz_convert_pixmap'
+                                      fz_device_rgb(gctx), NULL, NULL, color_params, 1);
+                                                                       ^~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:35,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/pixmap.h:77:12: note: expected 'const fz_color_params *' {aka 'const struct fz_color_params_s *'} but argument is of type 'fz_color_params' {aka 'struct fz_color_params_s'}
+ fz_pixmap *fz_convert_pixmap(fz_context *ctx, fz_pixmap *pix, fz_colorspace *cs_des, fz_colorspace *prf, fz_default_colorspaces *default_cs, const fz_color_params *color_params, int keep_alpha);
+            ^~~~~~~~~~~~~~~~~
+In file included from /usr/include/python3.7m/pytime.h:6,
+                 from /usr/include/python3.7m/Python.h:87,
+                 from fitz/fitz_wrap.c:154:
+fitz/fitz_wrap.c: In function 'fz_document_s_FormFonts':
+/usr/include/python3.7m/object.h:921:18: warning: statement with no effect [-Wunused-value]
+ #define Py_None (&_Py_NoneStruct)
+                 ~^~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:2730:14: note: in expansion of macro 'Py_None'
+ #define NONE Py_None
+              ^~~~~~~
+fitz/fitz_wrap.c:7632:28: note: in expansion of macro 'NONE'
+             fz_catch(gctx) NONE;       // any problem yields None
+                            ^~~~
+fitz/fitz_wrap.c: In function 'fz_document_s__addFormFont':
+/usr/include/python3.7m/object.h:921:18: warning: statement with no effect [-Wunused-value]
+ #define Py_None (&_Py_NoneStruct)
+                 ~^~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:2730:14: note: in expansion of macro 'Py_None'
+ #define NONE Py_None
+              ^~~~~~~
+fitz/fitz_wrap.c:7637:23: note: in expansion of macro 'NONE'
+             if (!pdf) NONE;           // not a PDF
+                       ^~~~
+fitz/fitz_wrap.c: In function 'fz_document_s_fullcopyPage':
+fitz/fitz_wrap.c:7913:69: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+                                fz_new_buffer_from_copied_data(gctx, "  ", 1), NULL, 0);
+                                                                     ^~~~
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz/hash.h:6,
+                 from /usr/include/mupdf/fitz.h:16,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/buffer.h:28:12: note: expected 'const unsigned char *' but argument is of type 'char *'
+ fz_buffer *fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:7893:22: warning: unused variable 'page2' [-Wunused-variable]
+             pdf_obj *page2 = NULL;
+                      ^~~~~
+fitz/fitz_wrap.c: In function 'fz_document_s__move_copy_page':
+fitz/fitz_wrap.c:7949:26: warning: unused variable 'page2' [-Wunused-variable]
+                 pdf_obj *page2 = pdf_lookup_page_loc(gctx, pdf, nb, &parent2, &i2);
+                          ^~~~~
+fitz/fitz_wrap.c: In function 'fz_page_s_getSVGimage':
+fitz/fitz_wrap.c:8038:29: warning: unused variable 'seps' [-Wunused-variable]
+             fz_separations *seps = NULL;
+                             ^~~~
+fitz/fitz_wrap.c: In function 'fz_page_s_addCaretAnnot':
+fitz/fitz_wrap.c:8071:31: warning: unused variable 'pdf' [-Wunused-variable]
+                 pdf_document *pdf = page->doc;
+                               ^~~
+fitz/fitz_wrap.c: In function 'fz_page_s_addFileAnnot':
+fitz/fitz_wrap.c:8217:20: warning: unused variable 'len' [-Wunused-variable]
+             size_t len = 0;
+                    ^~~
+fitz/fitz_wrap.c:8214:19: warning: unused variable 'data' [-Wunused-variable]
+             char *data = NULL, *uf = ufilename, *d = desc;
+                   ^~~~
+fitz/fitz_wrap.c: In function 'fz_page_s__insertImage':
+fitz/fitz_wrap.c:8710:77: error: incompatible type for argument 6 of 'fz_convert_pixmap'
+                         pm = fz_convert_pixmap(gctx, pix, NULL, NULL, NULL, color_params, 1);
+                                                                             ^~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:35,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/pixmap.h:77:12: note: expected 'const fz_color_params *' {aka 'const struct fz_color_params_s *'} but argument is of type 'fz_color_params' {aka 'struct fz_color_params_s'}
+ fz_pixmap *fz_convert_pixmap(fz_context *ctx, fz_pixmap *pix, fz_colorspace *cs_des, fz_colorspace *prf, fz_default_colorspaces *default_cs, const fz_color_params *color_params, int keep_alpha);
+            ^~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:8726:80: error: incompatible type for argument 6 of 'fz_convert_pixmap'
+                         pm = fz_convert_pixmap(gctx, pixmap, NULL, NULL, NULL, color_params, 1);
+                                                                                ^~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:35,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/pixmap.h:77:12: note: expected 'const fz_color_params *' {aka 'const struct fz_color_params_s *'} but argument is of type 'fz_color_params' {aka 'struct fz_color_params_s'}
+ fz_pixmap *fz_convert_pixmap(fz_context *ctx, fz_pixmap *pix, fz_colorspace *cs_des, fz_colorspace *prf, fz_default_colorspaces *default_cs, const fz_color_params *color_params, int keep_alpha);
+            ^~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:8679:19: warning: unused variable 'cont' [-Wunused-variable]
+             char *cont = NULL;
+                   ^~~~
+fitz/fitz_wrap.c:8675:24: warning: unused variable 'res' [-Wunused-variable]
+             fz_buffer *res = NULL, *nres = NULL,  *imgbuf = NULL;
+                        ^~~
+fitz/fitz_wrap.c:8673:29: warning: unused variable 'seps' [-Wunused-variable]
+             fz_separations *seps = NULL;
+                             ^~~~
+fitz/fitz_wrap.c: In function 'new_fz_pixmap_s__SWIG_1':
+fitz/fitz_wrap.c:8952:68: error: incompatible type for argument 6 of 'fz_convert_pixmap'
+                 pm = fz_convert_pixmap(gctx, spix, cs, NULL, NULL, color_params, 1);
+                                                                    ^~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:35,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/pixmap.h:77:12: note: expected 'const fz_color_params *' {aka 'const struct fz_color_params_s *'} but argument is of type 'fz_color_params' {aka 'struct fz_color_params_s'}
+ fz_pixmap *fz_convert_pixmap(fz_context *ctx, fz_pixmap *pix, fz_colorspace *cs_des, fz_colorspace *prf, fz_default_colorspaces *default_cs, const fz_color_params *color_params, int keep_alpha);
+            ^~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'new_fz_pixmap_s__SWIG_4':
+fitz/fitz_wrap.c:9028:32: warning: comparison of integer expressions of different signedness: 'int' and 'size_t' {aka 'long unsigned int'} [-Wsign-compare]
+                 if (stride * h != size) THROWMSG("bad samples length");
+                                ^~
+fitz/fitz_wrap.c: In function 'pdf_annot_s_fileUpd':
+fitz/fitz_wrap.c:9783:21: warning: unused variable 'size' [-Wunused-variable]
+             int64_t size = 0;
+                     ^~~~
+fitz/fitz_wrap.c:9780:19: warning: unused variable 'data' [-Wunused-variable]
+             char *data = NULL;              // for new file content
+                   ^~~~
+fitz/fitz_wrap.c: In function 'fz_stext_page_s__getImageBlock':
+fitz/fitz_wrap.c:10194:82: error: incompatible type for argument 3 of 'fz_new_buffer_from_image_as_png'
+                     buf = freebuf = fz_new_buffer_from_image_as_png(gctx, image, color_params);
+                                                                                  ^~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:63,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/write-pixmap.h:78:12: note: expected 'const fz_color_params *' {aka 'const struct fz_color_params_s *'} but argument is of type 'fz_color_params' {aka 'struct fz_color_params_s'}
+ fz_buffer *fz_new_buffer_from_image_as_png(fz_context *ctx, fz_image *image, const fz_color_params *color_params);
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'fz_stext_page_s__getCharList':
+fitz/fitz_wrap.c:10290:51: error: 'fz_stext_char' {aka 'struct fz_stext_char_s'} has no member named 'color'
+                                                 ch->color,
+                                                   ^~
+fitz/fitz_wrap.c: In function 'fz_stext_page_s__extractText':
+fitz/fitz_wrap.c:10436:25: error: too many arguments to function 'fz_print_stext_page_as_html'
+                         fz_print_stext_page_as_html(gctx, out, self, 0);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:48,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/structured-text.h:114:6: note: declared here
+ void fz_print_stext_page_as_html(fz_context *ctx, fz_output *out, fz_stext_page *page);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:10439:25: error: too many arguments to function 'fz_print_stext_page_as_xml'
+                         fz_print_stext_page_as_xml(gctx, out, self, 0);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:48,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/structured-text.h:122:6: note: declared here
+ void fz_print_stext_page_as_xml(fz_context *ctx, fz_output *out, fz_stext_page *page);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:10442:25: error: too many arguments to function 'fz_print_stext_page_as_xhtml'
+                         fz_print_stext_page_as_xhtml(gctx, out, self, 0);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/mupdf/fitz.h:48,
+                 from fitz/fitz_wrap.c:2732:
+/usr/include/mupdf/fitz/structured-text.h:118:6: note: declared here
+ void fz_print_stext_page_as_xhtml(fz_context *ctx, fz_output *out, fz_stext_page *page);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'PyInit__fitz':
+fitz/fitz_wrap.c:20360:3: warning: implicit declaration of function 'fz_set_warning_callback'; did you mean 'pdf_set_doc_event_callback'? [-Wimplicit-function-declaration]
+   fz_set_warning_callback(gctx, JM_mupdf_warning, &user);
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   pdf_set_doc_event_callback
+fitz/fitz_wrap.c:20361:3: warning: implicit declaration of function 'fz_set_error_callback'; did you mean 'pdf_set_doc_event_callback'? [-Wimplicit-function-declaration]
+   fz_set_error_callback(gctx, JM_mupdf_error, &user);
+   ^~~~~~~~~~~~~~~~~~~~~
+   pdf_set_doc_event_callback
+error: command 'gcc' failed with exit status 1
+>>> BUILD 1.16.0 on alpine 3.10: FAILED
+>>> record: /root/pmrepo/.cache/derive/3.10-1.16.0.json
+EXIT=1

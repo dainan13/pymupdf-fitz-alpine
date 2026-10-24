@@ -1,0 +1,370 @@
+>>> =========== alpine 3.14 / PyMuPDF 1.18.1 ===========
+>>> reusing rootfs /var/tmp/pymupdf-derive/rootfs/3.14 (3.14.10)
+running build_ext
+building 'fitz._fitz' extension
+creating build
+creating build/temp.linux-x86_64-3.9
+creating build/temp.linux-x86_64-3.9/fitz
+gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -fomit-frame-pointer -g -fno-semantic-interposition -fomit-frame-pointer -g -fno-semantic-interposition -fomit-frame-pointer -g -fno-semantic-interposition -DTHREAD_STACK_SIZE=0x100000 -I/usr/include/freetype2 -fPIC -I/usr/include/mupdf -I/usr/local/include/mupdf -Imupdf/thirdparty/freetype/include -I/usr/include/python3.9 -c fitz/fitz_wrap.c -o build/temp.linux-x86_64-3.9/fitz/fitz_wrap.o
+fitz/fitz_wrap.c: In function 'JM_get_fontbuffer':
+fitz/fitz_wrap.c:4097:11: warning: variable 'ext' set but not used [-Wunused-but-set-variable]
+ 4097 |     char *ext = NULL;
+      |           ^~~
+fitz/fitz_wrap.c: In function 'JM_invert_pixmap_rect':
+fitz/fitz_wrap.c:4491:19: warning: operation on 's' may be undefined [-Wsequence-point]
+ 4491 |                 *s++ = 255 - *s;
+      |                  ~^~
+fitz/fitz_wrap.c:4492:30: warning: value computed is not used [-Wunused-value]
+ 4492 |             if (dest->alpha) *s++;
+      |                              ^~~~
+fitz/fitz_wrap.c: In function 'JM_image_profile':
+fitz/fitz_wrap.c:4531:11: warning: pointer targets in assignment from 'char *' to 'unsigned char *' differ in signedness [-Wpointer-sign]
+ 4531 |         c = PyBytes_AS_STRING(imagedata);
+      |           ^
+fitz/fitz_wrap.c:4534:11: warning: pointer targets in assignment from 'char *' to 'unsigned char *' differ in signedness [-Wpointer-sign]
+ 4534 |         c = PyByteArray_AS_STRING(imagedata);
+      |           ^
+fitz/fitz_wrap.c: In function 'JM_delete_annot':
+fitz/fitz_wrap.c:4989:18: warning: unused variable 'popup' [-Wunused-variable]
+ 4989 |         pdf_obj *popup = pdf_dict_get(ctx, annot->obj, PDF_NAME(Popup));
+      |                  ^~~~~
+fitz/fitz_wrap.c: In function 'JM_get_annot_xref_list':
+fitz/fitz_wrap.c:5081:14: warning: unused variable 'name' [-Wunused-variable]
+ 5081 |     pdf_obj *name = NULL;
+      |              ^~~~
+fitz/fitz_wrap.c: In function 'JM_get_annot_by_xref':
+fitz/fitz_wrap.c:5174:12: warning: unused variable 'len' [-Wunused-variable]
+ 5174 |     size_t len = 0;
+      |            ^~~
+fitz/fitz_wrap.c: In function 'JM_append_rune':
+fitz/fitz_wrap.c:5239:18: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 5239 |     if (ch >= 32 && ch <= 127 || ch == 10) {
+      |         ~~~~~~~~~^~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'JM_new_javascript':
+fitz/fitz_wrap.c:5824:47: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+ 5824 |     res = fz_new_buffer_from_copied_data(ctx, data, strlen(data));
+      |                                               ^~~~
+      |                                               |
+      |                                               char *
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz.h:12,
+                 from fitz/fitz_wrap.c:2734:
+/usr/include/mupdf/fitz/buffer.h:83:81: note: expected 'const unsigned char *' but argument is of type 'char *'
+   83 | fz_buffer *fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+      |                                                            ~~~~~~~~~~~~~~~~~~~~~^~~~
+fitz/fitz_wrap.c: In function 'JM_choice_options':
+fitz/fitz_wrap.c:6152:19: warning: unused variable 'pdf' [-Wunused-variable]
+ 6152 |     pdf_document *pdf = pdf_get_bound_document(ctx, annot->obj);
+      |                   ^~~
+fitz/fitz_wrap.c: In function 'JM_get_widget_properties':
+fitz/fitz_wrap.c:6209:16: warning: unused variable 'res' [-Wunused-variable]
+ 6209 |     fz_buffer *res = NULL;
+      |                ^~~
+fitz/fitz_wrap.c:6208:39: warning: unused variable 'o' [-Wunused-variable]
+ 6208 |     pdf_obj *obj = NULL, *js = NULL, *o = NULL;
+      |                                       ^
+fitz/fitz_wrap.c:6208:27: warning: unused variable 'js' [-Wunused-variable]
+ 6208 |     pdf_obj *obj = NULL, *js = NULL, *o = NULL;
+      |                           ^~
+fitz/fitz_wrap.c: In function 'JM_set_widget_properties':
+fitz/fitz_wrap.c:6343:9: warning: variable 'result' set but not used [-Wunused-but-set-variable]
+ 6343 |     int result = 0;
+      |         ^~~~~~
+fitz/fitz_wrap.c: In function 'JM_embed_file':
+fitz/fitz_wrap.c:6614:64: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+ 6614 |                            fz_new_buffer_from_copied_data(ctx, "  ", 1),
+      |                                                                ^~~~
+      |                                                                |
+      |                                                                char *
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz.h:12,
+                 from fitz/fitz_wrap.c:2734:
+/usr/include/mupdf/fitz/buffer.h:83:81: note: expected 'const unsigned char *' but argument is of type 'char *'
+   83 | fz_buffer *fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+      |                                                            ~~~~~~~~~~~~~~~~~~~~~^~~~
+fitz/fitz_wrap.c: At top level:
+fitz/fitz_wrap.c:7755:40: warning: 'struct Document' declared inside parameter list will not be visible outside of this definition or declaration
+ 7755 | SWIGINTERN void delete_Document(struct Document *self){
+      |                                        ^~~~~~~~
+fitz/fitz_wrap.c: In function 'Document__embeddedFileAdd':
+fitz/fitz_wrap.c:8378:20: warning: variable 'size' set but not used [-Wunused-but-set-variable]
+ 8378 |             size_t size = 0;
+      |                    ^~~~
+fitz/fitz_wrap.c:8377:17: warning: unused variable 'entry' [-Wunused-variable]
+ 8377 |             int entry = 0;
+      |                 ^~~~~
+fitz/fitz_wrap.c: In function 'Document_nextLocation':
+fitz/fitz_wrap.c:8511:17: warning: unused variable 'page_n' [-Wunused-variable]
+ 8511 |             int page_n = -1;
+      |                 ^~~~~~
+fitz/fitz_wrap.c: In function 'Document__getPDFfileid':
+fitz/fitz_wrap.c:8741:68: warning: pointer targets in passing argument 1 of 'JM_UnicodeFromStr' differ in signedness [-Wpointer-sign]
+ 8741 |                         LIST_APPEND_DROP(idlist, JM_UnicodeFromStr(hex));
+      |                                                                    ^~~
+      |                                                                    |
+      |                                                                    unsigned char *
+fitz/fitz_wrap.c:3487:41: note: expected 'const char *' but argument is of type 'unsigned char *'
+ 3487 | PyObject *JM_UnicodeFromStr(const char *c)
+      |                             ~~~~~~~~~~~~^
+fitz/fitz_wrap.c: At top level:
+fitz/fitz_wrap.c:8867:193: warning: 'struct Graftmap' declared inside parameter list will not be visible outside of this definition or declaration
+ 8867 | SWIGINTERN PyObject *Document_insertPDF(struct Document *self,struct Document *docsrc,int from_page,int to_page,int start_at,int rotate,int links,int annots,int show_progress,int final,struct Graftmap *_gmap){
+      |                                                                                                                                                                                                 ^~~~~~~~
+fitz/fitz_wrap.c: In function 'Document__getCharWidths':
+fitz/fitz_wrap.c:8991:36: warning: unused variable 'fb_font' [-Wunused-variable]
+ 8991 |             fz_font *font = NULL, *fb_font= NULL;
+      |                                    ^~~~~~~
+fitz/fitz_wrap.c:8988:17: warning: unused variable 'lang' [-Wunused-variable]
+ 8988 |             int lang = 0;
+      |                 ^~~~
+fitz/fitz_wrap.c:8987:17: warning: unused variable 'cwlen' [-Wunused-variable]
+ 8987 |             int cwlen = 0;
+      |                 ^~~~~
+fitz/fitz_wrap.c: In function 'Document_extractFont':
+fitz/fitz_wrap.c:9130:24: warning: unused variable 'len' [-Wunused-variable]
+ 9130 |             Py_ssize_t len = 0;
+      |                        ^~~
+fitz/fitz_wrap.c: In function 'Document_fullcopyPage':
+fitz/fitz_wrap.c:9753:69: warning: pointer targets in passing argument 2 of 'fz_new_buffer_from_copied_data' differ in signedness [-Wpointer-sign]
+ 9753 |                                fz_new_buffer_from_copied_data(gctx, "  ", 1), NULL, 0);
+      |                                                                     ^~~~
+      |                                                                     |
+      |                                                                     char *
+In file included from /usr/include/mupdf/fitz/output.h:6,
+                 from /usr/include/mupdf/fitz.h:12,
+                 from fitz/fitz_wrap.c:2734:
+/usr/include/mupdf/fitz/buffer.h:83:81: note: expected 'const unsigned char *' but argument is of type 'char *'
+   83 | fz_buffer *fz_new_buffer_from_copied_data(fz_context *ctx, const unsigned char *data, size_t size);
+      |                                                            ~~~~~~~~~~~~~~~~~~~~~^~~~
+fitz/fitz_wrap.c:9712:22: warning: unused variable 'page2' [-Wunused-variable]
+ 9712 |             pdf_obj *page2 = NULL;
+      |                      ^~~~~
+fitz/fitz_wrap.c: In function 'Document__move_copy_page':
+fitz/fitz_wrap.c:9789:26: warning: unused variable 'page2' [-Wunused-variable]
+ 9789 |                 pdf_obj *page2 = pdf_lookup_page_loc(gctx, pdf, nb, &parent2, &i2);
+      |                          ^~~~~
+fitz/fitz_wrap.c: In function 'Page_getSVGimage':
+fitz/fitz_wrap.c:9975:29: warning: unused variable 'seps' [-Wunused-variable]
+ 9975 |             fz_separations *seps = NULL;
+      |                             ^~~~
+fitz/fitz_wrap.c: At top level:
+fitz/fitz_wrap.c:10468:104: warning: 'struct Colorspace' declared inside parameter list will not be visible outside of this definition or declaration
+10468 | SWIGINTERN struct Pixmap *Page__makePixmap(struct Page *self,struct Document *doc,PyObject *ctm,struct Colorspace *cs,int alpha,int annots,PyObject *clip){
+      |                                                                                                        ^~~~~~~~~~
+fitz/fitz_wrap.c:10720:142: warning: 'struct Graftmap' declared inside parameter list will not be visible outside of this definition or declaration
+10720 | SWIGINTERN PyObject *Page__showPDFpage(struct Page *self,struct Page *fz_srcpage,int overlay,PyObject *matrix,int xref,PyObject *clip,struct Graftmap *graftmap,char *_imgname){
+      |                                                                                                                                              ^~~~~~~~
+fitz/fitz_wrap.c: In function 'Page__insertImage':
+fitz/fitz_wrap.c:10792:29: warning: unused variable 'seps' [-Wunused-variable]
+10792 |             fz_separations *seps = NULL;
+      |                             ^~~~
+fitz/fitz_wrap.c: In function 'Page__getContents':
+fitz/fitz_wrap.c:11043:35: warning: comparison of integer expressions of different signedness: 'int' and 'size_t' {aka 'long unsigned int'} [-Wsign-compare]
+11043 |                     for (i = 0; i < n; i++) {
+      |                                   ^
+fitz/fitz_wrap.c: At top level:
+fitz/fitz_wrap.c:11091:53: warning: 'struct Colorspace' declared inside parameter list will not be visible outside of this definition or declaration
+11091 | SWIGINTERN struct Pixmap *new_Pixmap__SWIG_0(struct Colorspace *cs,PyObject *bbox,int alpha){
+      |                                                     ^~~~~~~~~~
+fitz/fitz_wrap.c:11101:53: warning: 'struct Colorspace' declared inside parameter list will not be visible outside of this definition or declaration
+11101 | SWIGINTERN struct Pixmap *new_Pixmap__SWIG_1(struct Colorspace *cs,struct Pixmap *spix){
+      |                                                     ^~~~~~~~~~
+fitz/fitz_wrap.c:11170:53: warning: 'struct Colorspace' declared inside parameter list will not be visible outside of this definition or declaration
+11170 | SWIGINTERN struct Pixmap *new_Pixmap__SWIG_4(struct Colorspace *cs,int w,int h,PyObject *samples,int alpha){
+      |                                                     ^~~~~~~~~~
+fitz/fitz_wrap.c: In function 'new_Pixmap__SWIG_4':
+fitz/fitz_wrap.c:11182:32: warning: comparison of integer expressions of different signedness: 'int' and 'size_t' {aka 'long unsigned int'} [-Wsign-compare]
+11182 |                 if (stride * h != size) THROWMSG("bad samples length");
+      |                                ^~
+fitz/fitz_wrap.c: In function 'Annot_fileUpd':
+fitz/fitz_wrap.c:12329:21: warning: unused variable 'size' [-Wunused-variable]
+12329 |             int64_t size = 0;
+      |                     ^~~~
+fitz/fitz_wrap.c:12326:19: warning: unused variable 'data' [-Wunused-variable]
+12326 |             char *data = NULL;              // for new file content
+      |                   ^~~~
+fitz/fitz_wrap.c: In function 'TextPage_extractBLOCKS':
+fitz/fitz_wrap.c:12766:31: warning: unused variable 'last_y0' [-Wunused-variable]
+12766 |                         float last_y0 = 0.0;
+      |                               ^~~~~~~
+fitz/fitz_wrap.c: At top level:
+fitz/fitz_wrap.c:12950:40: warning: 'struct Graftmap' declared inside parameter list will not be visible outside of this definition or declaration
+12950 | SWIGINTERN void delete_Graftmap(struct Graftmap *self){
+      |                                        ^~~~~~~~
+fitz/fitz_wrap.c:12967:42: warning: 'struct TextWriter' declared inside parameter list will not be visible outside of this definition or declaration
+12967 | SWIGINTERN void delete_TextWriter(struct TextWriter *self){
+      |                                          ^~~~~~~~~~
+fitz/fitz_wrap.c:12982:96: warning: 'struct Font' declared inside parameter list will not be visible outside of this definition or declaration
+12982 | SWIGINTERN PyObject *TextWriter_append(struct TextWriter *self,PyObject *pos,char *text,struct Font *font,float fontsize,char *language){
+      |                                                                                                ^~~~
+fitz/fitz_wrap.c:13045:36: warning: 'struct Font' declared inside parameter list will not be visible outside of this definition or declaration
+13045 | SWIGINTERN void delete_Font(struct Font *self){
+      |                                    ^~~~
+fitz/fitz_wrap.c: In function 'Font_buffer':
+fitz/fitz_wrap.c:13124:39: warning: pointer targets in passing argument 1 of 'PyBytes_FromStringAndSize' differ in signedness [-Wpointer-sign]
+13124 |             return JM_BinFromCharSize(data, len);
+      |                                       ^~~~
+      |                                       |
+      |                                       unsigned char *
+fitz/fitz_wrap.c:2728:64: note: in definition of macro 'JM_BinFromCharSize'
+ 2728 |     #define JM_BinFromCharSize(x, y) PyBytes_FromStringAndSize(x, (Py_ssize_t) y)
+      |                                                                ^
+In file included from /usr/include/python3.9/Python.h:92,
+                 from fitz/fitz_wrap.c:154:
+/usr/include/python3.9/bytesobject.h:37:50: note: expected 'const char *' but argument is of type 'unsigned char *'
+   37 | PyAPI_FUNC(PyObject *) PyBytes_FromStringAndSize(const char *, Py_ssize_t);
+      |                                                  ^~~~~~~~~~~~
+fitz/fitz_wrap.c: In function '_wrap_delete_Document':
+fitz/fitz_wrap.c:13448:19: warning: passing argument 1 of 'delete_Document' from incompatible pointer type [-Wincompatible-pointer-types]
+13448 |   delete_Document(arg1);
+      |                   ^~~~
+      |                   |
+      |                   struct Document *
+fitz/fitz_wrap.c:7755:50: note: expected 'struct Document *' but argument is of type 'struct Document *'
+ 7755 | SWIGINTERN void delete_Document(struct Document *self){
+      |                                 ~~~~~~~~~~~~~~~~~^~~~
+fitz/fitz_wrap.c: In function '_wrap_Document_insertPDF':
+fitz/fitz_wrap.c:15246:96: warning: passing argument 11 of 'Document_insertPDF' from incompatible pointer type [-Wincompatible-pointer-types]
+15246 |     result = (PyObject *)Document_insertPDF(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+      |                                                                                                ^~~~~
+      |                                                                                                |
+      |                                                                                                struct Graftmap *
+fitz/fitz_wrap.c:8867:203: note: expected 'struct Graftmap *' but argument is of type 'struct Graftmap *'
+ 8867 | SWIGINTERN PyObject *Document_insertPDF(struct Document *self,struct Document *docsrc,int from_page,int to_page,int start_at,int rotate,int links,int annots,int show_progress,int final,struct Graftmap *_gmap){
+      |                                                                                                                                                                                          ~~~~~~~~~~~~~~~~~^~~~~
+fitz/fitz_wrap.c: In function '_wrap_Page__makePixmap':
+fitz/fitz_wrap.c:17787:63: warning: passing argument 4 of 'Page__makePixmap' from incompatible pointer type [-Wincompatible-pointer-types]
+17787 |     result = (struct Pixmap *)Page__makePixmap(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+      |                                                               ^~~~
+      |                                                               |
+      |                                                               struct Colorspace *
+fitz/fitz_wrap.c:10468:116: note: expected 'struct Colorspace *' but argument is of type 'struct Colorspace *'
+10468 | SWIGINTERN struct Pixmap *Page__makePixmap(struct Page *self,struct Document *doc,PyObject *ctm,struct Colorspace *cs,int alpha,int annots,PyObject *clip){
+      |                                                                                                 ~~~~~~~~~~~~~~~~~~~^~
+fitz/fitz_wrap.c: In function '_wrap_Page__showPDFpage':
+fitz/fitz_wrap.c:18244:74: warning: passing argument 7 of 'Page__showPDFpage' from incompatible pointer type [-Wincompatible-pointer-types]
+18244 |     result = (PyObject *)Page__showPDFpage(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+      |                                                                          ^~~~
+      |                                                                          |
+      |                                                                          struct Graftmap *
+fitz/fitz_wrap.c:10720:152: note: expected 'struct Graftmap *' but argument is of type 'struct Graftmap *'
+10720 | SWIGINTERN PyObject *Page__showPDFpage(struct Page *self,struct Page *fz_srcpage,int overlay,PyObject *matrix,int xref,PyObject *clip,struct Graftmap *graftmap,char *_imgname){
+      |                                                                                                                                       ~~~~~~~~~~~~~~~~~^~~~~~~~
+fitz/fitz_wrap.c: In function '_wrap_new_Pixmap__SWIG_0':
+fitz/fitz_wrap.c:18634:50: warning: passing argument 1 of 'new_Pixmap__SWIG_0' from incompatible pointer type [-Wincompatible-pointer-types]
+18634 |     result = (struct Pixmap *)new_Pixmap__SWIG_0(arg1,arg2,arg3);
+      |                                                  ^~~~
+      |                                                  |
+      |                                                  struct Colorspace *
+fitz/fitz_wrap.c:11091:65: note: expected 'struct Colorspace *' but argument is of type 'struct Colorspace *'
+11091 | SWIGINTERN struct Pixmap *new_Pixmap__SWIG_0(struct Colorspace *cs,PyObject *bbox,int alpha){
+      |                                              ~~~~~~~~~~~~~~~~~~~^~
+fitz/fitz_wrap.c: In function '_wrap_new_Pixmap__SWIG_1':
+fitz/fitz_wrap.c:18669:50: warning: passing argument 1 of 'new_Pixmap__SWIG_1' from incompatible pointer type [-Wincompatible-pointer-types]
+18669 |     result = (struct Pixmap *)new_Pixmap__SWIG_1(arg1,arg2);
+      |                                                  ^~~~
+      |                                                  |
+      |                                                  struct Colorspace *
+fitz/fitz_wrap.c:11101:65: note: expected 'struct Colorspace *' but argument is of type 'struct Colorspace *'
+11101 | SWIGINTERN struct Pixmap *new_Pixmap__SWIG_1(struct Colorspace *cs,struct Pixmap *spix){
+      |                                              ~~~~~~~~~~~~~~~~~~~^~
+fitz/fitz_wrap.c: In function '_wrap_new_Pixmap__SWIG_4':
+fitz/fitz_wrap.c:18808:50: warning: passing argument 1 of 'new_Pixmap__SWIG_4' from incompatible pointer type [-Wincompatible-pointer-types]
+18808 |     result = (struct Pixmap *)new_Pixmap__SWIG_4(arg1,arg2,arg3,arg4,arg5);
+      |                                                  ^~~~
+      |                                                  |
+      |                                                  struct Colorspace *
+fitz/fitz_wrap.c:11170:65: note: expected 'struct Colorspace *' but argument is of type 'struct Colorspace *'
+11170 | SWIGINTERN struct Pixmap *new_Pixmap__SWIG_4(struct Colorspace *cs,int w,int h,PyObject *samples,int alpha){
+      |                                              ~~~~~~~~~~~~~~~~~~~^~
+fitz/fitz_wrap.c: In function '_wrap_delete_Graftmap':
+fitz/fitz_wrap.c:22678:19: warning: passing argument 1 of 'delete_Graftmap' from incompatible pointer type [-Wincompatible-pointer-types]
+22678 |   delete_Graftmap(arg1);
+      |                   ^~~~
+      |                   |
+      |                   struct Graftmap *
+fitz/fitz_wrap.c:12950:50: note: expected 'struct Graftmap *' but argument is of type 'struct Graftmap *'
+12950 | SWIGINTERN void delete_Graftmap(struct Graftmap *self){
+      |                                 ~~~~~~~~~~~~~~~~~^~~~
+fitz/fitz_wrap.c: In function '_wrap_delete_TextWriter':
+fitz/fitz_wrap.c:22740:21: warning: passing argument 1 of 'delete_TextWriter' from incompatible pointer type [-Wincompatible-pointer-types]
+22740 |   delete_TextWriter(arg1);
+      |                     ^~~~
+      |                     |
+      |                     struct TextWriter *
+fitz/fitz_wrap.c:12967:54: note: expected 'struct TextWriter *' but argument is of type 'struct TextWriter *'
+12967 | SWIGINTERN void delete_TextWriter(struct TextWriter *self){
+      |                                   ~~~~~~~~~~~~~~~~~~~^~~~
+fitz/fitz_wrap.c: In function '_wrap_TextWriter_append':
+fitz/fitz_wrap.c:22841:59: warning: passing argument 4 of 'TextWriter_append' from incompatible pointer type [-Wincompatible-pointer-types]
+22841 |     result = (PyObject *)TextWriter_append(arg1,arg2,arg3,arg4,arg5,arg6);
+      |                                                           ^~~~
+      |                                                           |
+      |                                                           struct Font *
+fitz/fitz_wrap.c:12982:102: note: expected 'struct Font *' but argument is of type 'struct Font *'
+12982 | SWIGINTERN PyObject *TextWriter_append(struct TextWriter *self,PyObject *pos,char *text,struct Font *font,float fontsize,char *language){
+      |                                                                                         ~~~~~~~~~~~~~^~~~
+fitz/fitz_wrap.c: In function '_wrap_delete_Font':
+fitz/fitz_wrap.c:22980:15: warning: passing argument 1 of 'delete_Font' from incompatible pointer type [-Wincompatible-pointer-types]
+22980 |   delete_Font(arg1);
+      |               ^~~~
+      |               |
+      |               struct Font *
+fitz/fitz_wrap.c:13045:42: note: expected 'struct Font *' but argument is of type 'struct Font *'
+13045 | SWIGINTERN void delete_Font(struct Font *self){
+      |                             ~~~~~~~~~~~~~^~~~
+At top level:
+fitz/fitz_wrap.c:7683:1: warning: 'jm_tracedraw_clip_path' defined but not used [-Wunused-function]
+ 7683 | jm_tracedraw_clip_path(fz_context *ctx, fz_device *dev_, const fz_path *path, int even_odd, fz_matrix ctm, fz_rect scissor)
+      | ^~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c: In function 'JM_make_textpage_dict':
+fitz/fitz_wrap.c:3349:12: warning: 'span_origin.x' may be used uninitialized in this function [-Wmaybe-uninitialized]
+ 3349 |     return Py_BuildValue("ff", p.x, p.y);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:5361:14: note: 'span_origin.x' was declared here
+ 5361 |     fz_point span_origin;
+      |              ^~~~~~~~~~~
+fitz/fitz_wrap.c:3349:12: warning: 'span_origin.y' may be used uninitialized in this function [-Wmaybe-uninitialized]
+ 3349 |     return Py_BuildValue("ff", p.x, p.y);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fitz/fitz_wrap.c:5361:14: note: 'span_origin.y' was declared here
+ 5361 |     fz_point span_origin;
+      |              ^~~~~~~~~~~
+gcc -shared -fno-semantic-interposition -fno-semantic-interposition -Wl,--no-as-needed -lfreetype -ljpeg -lopenjp2 -ljbig2dec -lharfbuzz -lz -I/usr/include/freetype2 build/temp.linux-x86_64-3.9/fitz/fitz_wrap.o -L/usr/lib -lmupdf -lmupdf-third -o /build/PyMuPDF-1.18.1/fitz/_fitz.cpython-39-x86_64-linux-musl.so
+>>> BUILD 1.18.1 on alpine 3.14: OK
+>>> reusing rootfs /var/tmp/pymupdf-derive/rootfs/3.14 (3.14.10)
+tar: PyMuPDF-1.18.1/build/temp.linux-x86_64-3.9/fitz/fitz_wrap.o: file changed as we read it
+tar: PyMuPDF-1.18.1/build/temp.linux-x86_64-3.9/fitz: file changed as we read it
+tar: PyMuPDF-1.18.1/fitz/fitz_wrap.c: file changed as we read it
+tar: PyMuPDF-1.18.1/fitz/_fitz.cpython-39-x86_64-linux-musl.so: file changed as we read it
+tar: PyMuPDF-1.18.1/fitz/utils.py: file changed as we read it
+tar: PyMuPDF-1.18.1/fitz/fitz.py: file changed as we read it
+tar: PyMuPDF-1.18.1/fitz: file changed as we read it
+tar: PyMuPDF-1.18.1: file changed as we read it
+python      : 3.9.17
+fitz module : /build/PyMuPDF-1.18.1/fitz/__init__.py
+VersionBind : 1.18.1
+VersionFitz : 1.18.0
+wrote       : /tmp/t-3.14/hello.pdf 996 bytes
+text        : 'Hello PyMuPDF on Alpine\nMuPDF 1.18.0'
+rendered    : 800x600 14341 bytes
+in-memory   : 996 bytes
+RESULT: SMOKE OK
+versions    : bind=1.18.1 fitz=1.18.0
+page1 image : 298x421 embedded
+saved       : /tmp/t-3.14/feature.pdf 11395 bytes
+toc         : [[1, 'First', 1], [1, 'Second', 2]]
+text p1     : 291 chars
+dict blocks : 2
+images p1   : 1
+link p2     : kind=1
+render p1   : 893x1263 3 comp
+render p2   : 893x1263 3 comp
+alpha png   : 4 comp 37670 bytes
+in-memory   : 11395 bytes
+insertPDF   : ok
+fonts p1    : [(5, 'n/a', 'Type1', 'Helvetica', 'Helvetica', 'WinAnsiEncoding'), (7, 'n/a', 'Type1', 'Times-Roman', 'Times-Roman', 'WinAnsiEncoding')]
+RESULT: FEATURE OK
+>>> TEST v1.18.1 on alpine 3.14: PASS
+>>> record: /root/pmrepo/.cache/derive/3.14-1.18.1.json
+EXIT=0
